@@ -11,7 +11,8 @@ namespace GbfRaidfinder.Common {
         private readonly bool _running;
         private readonly ISettingsController _settingsController;
 
-        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("", "");
+        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
+            "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
 
         public LoginController(ISettingsController settingsController, ITweetObserver tweetObserver) {
             _settingsController = settingsController;
