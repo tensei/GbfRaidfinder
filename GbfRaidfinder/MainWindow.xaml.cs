@@ -1,25 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.ComponentModel;
+using GbfRaidfinder.Data;
+using GbfRaidfinder.Interfaces;
+using GbfRaidfinder.Properties;
+using GbfRaidfinder.ViewModels;
 
 namespace GbfRaidfinder {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window {
-        public MainWindow() {
+    public partial class MainWindow {
+        private readonly ISettingsController _settingsController;
+        private readonly IRaidsController _raidsController;
+        private readonly ILoginController _loginController;
+        public MainWindow(Raids raids, ITweetProcessor tweetProcessor, IRaidsController raidsController, IRaidlistController raidlistController,
+            ISettingsController settingsController, ILoginController loginController) {
             InitializeComponent();
+            _settingsController = settingsController;
+            _raidsController = raidsController;
+            _loginController = loginController;
+            DataContext = new MainViewModel(raids, tweetProcessor, raidsController, raidlistController, settingsController, loginController,
+                TaskbarNotifyIcon);
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e) {
+            Settings.Default.Height = Height;
+            Settings.Default.Width = Width;
+            Settings.Default.Save();
+            _settingsController.Save();
+            _raidsController.Save();
+            _loginController.Stop();
+
         }
     }
 }

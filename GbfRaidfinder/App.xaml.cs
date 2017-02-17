@@ -1,15 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using GbfRaidfinder.Common;
+using GbfRaidfinder.Data;
+using GbfRaidfinder.Interfaces;
+using GbfRaidfinder.Twitter;
+using GbfRaidfinder.ViewModels;
+using Microsoft.Practices.Unity;
 
 namespace GbfRaidfinder {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///     Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
+        private void AppStartup(object sender, StartupEventArgs args) {
+            var container = new UnityContainer();
+            container.RegisterType<Raids>();
+            container.RegisterInstance<ISettingsController>(new SettingsController());
+            container.RegisterInstance<IRaidsController>(new RaidsController());
+            container.RegisterInstance<IRaidlistController>(new RaidListController());
+            container.RegisterInstance<ITweetProcessor>(new TweetProcessor());
+            container.RegisterType<ILoginController, LoginController>();
+            container.RegisterInstance<ITweetObserver>(new TweetObserver());
+            container.RegisterType<MainViewModel>();
+            container.RegisterType<MainWindow>();
+            container.Resolve<MainWindow>().Show();
+        }
     }
 }

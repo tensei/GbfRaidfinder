@@ -1,12 +1,104 @@
-﻿<Window x:Class="GbfRaidfinder.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GbfRaidfinder"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
-</Window>
+﻿<controls:MetroWindow x:Class="GbfRaidfinder.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:local="clr-namespace:GbfRaidfinder"
+                      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:views="clr-namespace:GbfRaidfinder.Views"
+                      xmlns:viewModels="clr-namespace:GbfRaidfinder.ViewModels"
+                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                      xmlns:data="clr-namespace:GbfRaidfinder.Data;assembly=GbfRaidfinder.Data"
+                      xmlns:tb="http://www.hardcodet.net/taskbar"
+                      xmlns:properties="clr-namespace:GbfRaidfinder.Properties"
+                      mc:Ignorable="d"
+                      Closing="MainWindow_OnClosing"
+                      Title="Granblue Fantasy Raidfinder" 
+                      Height="{Binding Source={x:Static properties:Settings.Default},
+                               Path=Height}" 
+                      Width="{Binding Source={x:Static properties:Settings.Default},
+                               Path=Width}"
+                      TitleCharacterCasing="Normal"
+                      NonActiveBorderBrush="Black" NonActiveGlowBrush="Black" BorderThickness="1"
+                      NonActiveWindowTitleBrush="{DynamicResource WindowTitleColorBrush}"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      d:DataContext="{d:DesignInstance {x:Type viewModels:MainViewModel}, IsDesignTimeCreatable=False}">
+    <controls:MetroWindow.LeftWindowCommands>
+        <controls:WindowCommands>
+            <Button Command="{Binding StartLoginCommand}">
+                Login
+            </Button>
+        </controls:WindowCommands>
+    </controls:MetroWindow.LeftWindowCommands>
+    <materialDesign:DialogHost>
+        <materialDesign:DrawerHost
+            IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <Grid Width="300">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                  HorizontalAlignment="Right" Margin="16"
+                                  IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                    <ScrollViewer Grid.Row="1">
+                        <ItemsControl ItemsSource="{Binding RaidBosses}" HorizontalContentAlignment="Stretch">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type data:RaidListItem}">
+                                    <Grid Height="60">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Image}" Grid.ColumnSpan="2" Stretch="UniformToFill" />
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="5,0">
+                                            <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold" />
+                                            <TextBlock Text="{Binding Japanese}" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <Button Grid.Column="1" Margin="5,0"
+                                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}, Path=DataContext.AddCommand, Mode=OneTime}"
+                                                CommandParameter="{Binding}"
+                                                Style="{DynamicResource MaterialDesignFloatingActionDarkButton}">
+                                            <materialDesign:PackIcon Kind="Plus" Height="24" Width="24" />
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <Grid>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl x:Name="itemsControl" ItemsSource="{Binding Follows}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" IsItemsHost="True" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <views:BossView BorderThickness="0,0,1,0" 
+                                    Height="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}"
+                                                MaxHeight="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}" BorderBrush="Black" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}"
+                              IsChecked="False" Margin="16" Height="50" Width="50"
+                              x:Name="MenuToggleButton" HorizontalAlignment="Right"
+                              VerticalAlignment="Bottom">
+                    <ToggleButton.Content>
+                        <materialDesign:PackIcon Kind="Plus" />
+                    </ToggleButton.Content>
+                    <materialDesign:ToggleButtonAssist.OnContent>
+                        <materialDesign:PackIcon Kind="ArrowLeft" />
+                    </materialDesign:ToggleButtonAssist.OnContent>
+                </ToggleButton>
+                <tb:TaskbarIcon x:Name="TaskbarNotifyIcon" IconSource="Assets/testicon.ico" />
+            </Grid>
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
+</controls:MetroWindow>
