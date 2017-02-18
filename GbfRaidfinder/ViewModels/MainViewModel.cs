@@ -1,51 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows;
 using System.Windows.Input;
+using GbfRaidfinder.Common;
 using GbfRaidfinder.Data;
+using GbfRaidfinder.Factorys;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Models;
 using GbfRaidfinder.Twitter;
-using Hardcodet.Wpf.TaskbarNotification;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Tweetinvi.Events;
+using Tweetinvi.Models;
 
 namespace GbfRaidfinder.ViewModels {
     public class MainViewModel {
         private readonly IRaidsController _raidsController;
-        private readonly ITweetProcessor _tweetProcessor;
         private readonly SoundPlayer _soudplayer = new SoundPlayer(@"assets\notification.wav");
-        private TaskbarIcon _taskbarIcon;
-
-        public MainViewModel(Raids raids, ITweetProcessor tweetProcessor, IRaidsController raidsController, IRaidlistController raidlistController,
-            ISettingsController settingsController, ILoginController loginController, TaskbarIcon taskbarIcon) {
+        private readonly ITweetProcessor _tweetProcessor;
+        private readonly ILoginController _loginController;
+        private readonly ITweetObserver _tweetObserver;
+        private readonly ISettingsController _settingsController;
+        public MainViewModel(ITweetProcessor tweetProcessor, ControllerFactory controllerFactory) {
             _tweetProcessor = tweetProcessor;
-            settingsController.Load();
-            _raidsController = raidsController;
-            _raidsController.Load();
-            _taskbarIcon = taskbarIcon;
-            raidlistController.Load();
-            Follows = new ReadOnlyObservableCollection<FollowModel>(raidsController.Follows);
-            RaidBosses = new ReadOnlyObservableCollection<RaidListItem>(raidlistController.RaidBossListItems);
-            
+            _raidsController = controllerFactory.GetRaidsController;
+            _loginController = controllerFactory.CreateLoginController;
+            _tweetObserver = controllerFactory.GetTweetObserver;
+            _settingsController = controllerFactory.GetSettingsController;
+            Follows = new ReadOnlyObservableCollection<FollowModel>(_raidsController.Follows);
+            RaidBosses = new ReadOnlyObservableCollection<RaidListItem>(controllerFactory.GetRaidlistController.RaidBossListItems);
+
             AddCommand = new ActionCommand(r => Add((RaidListItem) r));
             RemoveCommand = new ActionCommand(r => Remove((string) r));
-            StartLoginCommand = new ActionCommand(loginController.StartLogin);
+            StartLoginCommand = new ActionCommand(() => _loginController.StartNewLogin());
             MoveLeftCommand = new ActionCommand(f => MoveLeft((FollowModel) f));
             MoveRightCommand = new ActionCommand(f => MoveRight((FollowModel) f));
-            //TweetObservers = new ReadOnlyObservableCollection<TweetObserver>();
-            //tweetProcessor._tweetObservers.Add(new TweetObserver("Lv75 シュヴァリエ・マグナ", "Lvl 75 Luminiera Omega", Application.Current.Dispatcher));
 
-            loginController.TweetObserver.Subscribe(StreamOnNonMatchingTweetReceived, StreamOnNonMatchingTweetReceived);
+            _tweetObserver.Stream.MatchingTweetReceived += StreamOnMatchingTweetReceived;
+            _tweetObserver.Stream.NonMatchingTweetReceived += StreamOnNonMatchingTweetReceived;
+            _tweetObserver.Stream.StreamStopped += StreamOnStreamStopped;
+            _tweetObserver.Stream.DisconnectMessageReceived += StreamOnDisconnectMessageReceived;
+            Startup();
         }
 
+
+
         public ReadOnlyObservableCollection<FollowModel> Follows { get; }
-        private readonly ObservableCollection<RaidListItem> _raidBosses = new ObservableCollection<RaidListItem>();
         public ReadOnlyObservableCollection<RaidListItem> RaidBosses { get; }
 
         public ICommand StartLoginCommand { get; }
@@ -55,6 +55,32 @@ namespace GbfRaidfinder.ViewModels {
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
 
+        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
+            "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
+        private void Startup() {
+            if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) &&
+                string.IsNullOrWhiteSpace(_settingsController.Settings.AccessTokenSecret)) {
+                return;
+            }
+            _twitterCredentials.AccessTokenSecret = _settingsController.Settings.AccessTokenSecret;
+            _twitterCredentials.AccessToken = _settingsController.Settings.AccessToken;
+            _tweetObserver.Run(_twitterCredentials);
+        }
+        private void StreamOnDisconnectMessageReceived(object sender, DisconnectedEventArgs disconnectedEventArgs) {
+            _tweetObserver.Running = false;
+            Startup();
+        }
+
+        private void StreamOnStreamStopped(object sender, StreamExceptionEventArgs streamExceptionEventArgs) {
+            var ok = MessageBox.Show("Something went wrong relog please!", "Error", MessageBoxButton.OKCancel, MessageBoxImage.Error);
+            if (ok != MessageBoxResult.OK) {
+                return;
+            }
+            Application.Current.Dispatcher.BeginInvoke(new Action(async () => {
+                var creds = await _loginController.StartNewLogin();
+                _tweetObserver.Run(creds);
+            }));
+        }
         private void StreamOnNonMatchingTweetReceived(object sender, TweetEventArgs tweetEventArgs) {
             var tweet = _tweetProcessor.RecievedTweetInfo(tweetEventArgs.Tweet);
             if (tweet == null) {
@@ -63,13 +89,14 @@ namespace GbfRaidfinder.ViewModels {
             AddTweet(tweet);
         }
 
-        private void StreamOnNonMatchingTweetReceived(object sender, MatchedTweetReceivedEventArgs tweetEventArgs) {
+        private void StreamOnMatchingTweetReceived(object sender, MatchedTweetReceivedEventArgs tweetEventArgs) {
             var tweet = _tweetProcessor.RecievedTweetInfo(tweetEventArgs.Tweet);
             if (tweet == null) {
                 return;
             }
             AddTweet(tweet);
         }
+
 
         private void AddTweet(TweetInfo tweet) {
             try {

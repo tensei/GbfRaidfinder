@@ -12,39 +12,33 @@ using Tweetinvi.Streaming;
 namespace GbfRaidfinder.Twitter {
     [ImplementPropertyChanged]
     public class TweetObserver : ITweetObserver {
-        private readonly IFilteredStream _stream;
-        private ISettingsController _settingsController;
+        public IFilteredStream Stream { get; }
+        private readonly ISettingsController _settingsController;
 
-        public TweetObserver() {
-            _stream = Stream.CreateFilteredStream();
+        public TweetObserver(ISettingsController settingsController) {
+            Stream = Tweetinvi.Stream.CreateFilteredStream();
+            _settingsController = settingsController;
         }
 
         public bool Running { get; set; }
 
-        public void Run(ITwitterCredentials userCredentials, ISettingsController settingsController) {
-            _settingsController = settingsController;
-           
+        public void Run(ITwitterCredentials userCredentials) {
+
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackOnly;
-            _stream.Credentials = userCredentials;
+            Stream.Credentials = userCredentials;
             for (var i = 5; i < 151; i += 5) {
-                _stream.AddTrack($"Lv{i}");
+                Stream.AddTrack($"Lv{i}");
             }
-            _stream.AddTrack("I need backup!Battle ID:");
+            Stream.AddTrack("I need backup!Battle ID:");
             //stream.AddTrack("Lv");
-            _stream.DisconnectMessageReceived += StreamOnDisconnectMessageReceived;
             Start();
         }
-
-        public void Subscribe(EventHandler<TweetEventArgs> action, EventHandler<MatchedTweetReceivedEventArgs> match) {
-            _stream.NonMatchingTweetReceived += action;
-            _stream.MatchingTweetReceived += match;
-        }
-
+        
         private async void Start() {
             await Task.Delay(3000);
             try {
                 Running = true;
-                await _stream.StartStreamMatchingAllConditionsAsync();
+                await Stream.StartStreamMatchingAllConditionsAsync().ConfigureAwait(false);
             }
             catch (TwitterInvalidCredentialsException) {
                 Running = false;
@@ -57,13 +51,6 @@ namespace GbfRaidfinder.Twitter {
                 Running = false;
             }
         }
-
-        private void StreamOnDisconnectMessageReceived(object sender, DisconnectedEventArgs disconnectedEventArgs) {
-            Start();
-        }
-
-        public void Stop() {
-            _stream.StopStream();
-        }
+        
     }
 }

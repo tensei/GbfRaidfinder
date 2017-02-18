@@ -7,7 +7,6 @@ namespace GbfRaidfinder.Twitter {
     public class TweetProcessor : ITweetProcessor {
         private const string RaidRegexEnglish = "((?s).*)I need backup!Battle ID: (?<id>[0-9A-F]+)\n(.+)\n?(.*)";
         private const string RaidRegexJapanese = "((?s).*)参加者募集！参戦ID：(?<id>[0-9A-F]+)\n(.+)\n?(.*)";
-        public readonly Queue<TweetInfo> Queue = new Queue<TweetInfo>();
 
         public TweetInfo RecievedTweetInfo(ITweet tweet) => StreamOnNonMatchingTweetReceived(tweet);
 

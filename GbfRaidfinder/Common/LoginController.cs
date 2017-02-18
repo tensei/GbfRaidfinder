@@ -14,32 +14,13 @@ namespace GbfRaidfinder.Common {
         private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
             "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
 
-        public LoginController(ISettingsController settingsController, ITweetObserver tweetObserver) {
+        public LoginController(ISettingsController settingsController) {
             _settingsController = settingsController;
-            TweetObserver = tweetObserver;
-            _settingsController.Load();
-            if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) ||
-                string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken)) {
-                StartLogin();
-                return;
-            }
-            if (_running) {
-                return;
-            }
-            _twitterCredentials.AccessToken = _settingsController.Settings.AccessToken;
-            _twitterCredentials.AccessTokenSecret = _settingsController.Settings.AccessTokenSecret;
-            TweetObserver.Run(_twitterCredentials, settingsController);
-            _running = true;
         }
-
-        public ITweetObserver TweetObserver { get; }
-
+        
         public string Pin { get; set; }
 
-        public async void StartLogin() {
-            if (TweetObserver.Running) {
-                return;
-            }
+        public async Task<ITwitterCredentials> StartNewLogin() {
             await Task.Delay(1000);
             // Create a new set of credentials for the application.
             var appCredentials = _twitterCredentials;
@@ -53,27 +34,14 @@ namespace GbfRaidfinder.Common {
                 DataContext = this
             };
             await DialogHost.Show(dialog);
-            Login(authenticationContext);
-        }
-
-        private void Login(IAuthenticationContext context) {
-            if (string.IsNullOrWhiteSpace(Pin)) {
-                return;
-            }
-
             // With this pin code it is now possible to get the credentials back from Twitter
-            var userCredentials = AuthFlow.CreateCredentialsFromVerifierCode(Pin, context);
+            var userCredentials = AuthFlow.CreateCredentialsFromVerifierCode(Pin, authenticationContext);
             // Use the user credentials in your application
 
             _settingsController.Settings.AccessToken = userCredentials.AccessToken;
             _settingsController.Settings.AccessTokenSecret = userCredentials.AccessTokenSecret;
             _settingsController.Save();
-
-            TweetObserver.Run(userCredentials, _settingsController);
-        }
-
-        public void Stop() {
-            TweetObserver.Stop();
+            return userCredentials;
         }
     }
 }

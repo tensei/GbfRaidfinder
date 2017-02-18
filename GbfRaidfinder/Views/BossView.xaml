@@ -14,7 +14,7 @@
     <materialDesign:Transitioner SelectedIndex="0">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition  Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <materialDesign:ColorZone Grid.Row="0" materialDesign:ShadowAssist.ShadowDepth="Depth2">
@@ -24,7 +24,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Image Source="{Binding Image}" Stretch="UniformToFill" Grid.ColumnSpan="2"
-                        Visibility="{Binding ImageVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                           Visibility="{Binding ImageVisibility, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <StackPanel Grid.Column="0" Margin="4">
                         <TextBlock Text="{Binding English}" FontWeight="Bold" FontSize="16" />
                         <TextBlock Text="{Binding Japanese}" FontWeight="Bold" FontSize="16" />
@@ -71,10 +71,11 @@
                             <Grid>
                                 <StackPanel>
                                     <Button Background="Transparent" BorderThickness="0" Padding="4" Height="30"
-                                        HorizontalContentAlignment="Stretch" Margin="2" VerticalContentAlignment="Center"
-                                        Command="{Binding RelativeSource={RelativeSource FindAncestor,
+                                            HorizontalContentAlignment="Stretch" Margin="2"
+                                            VerticalContentAlignment="Center"
+                                            Command="{Binding RelativeSource={RelativeSource FindAncestor,
                                         AncestorType={x:Type local:BossView}}, Path=DataContext.CopyCommand, Mode=OneTime}"
-                                        CommandParameter="{Binding}">
+                                            CommandParameter="{Binding}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -88,7 +89,9 @@
                                             <TextBlock Grid.Column="2" Text="{Binding Id}" VerticalAlignment="Center" />
                                         </Grid>
                                     </Button>
-                                    <Separator Margin="0" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Style="{DynamicResource MaterialDesignLightSeparator}"/>
+                                    <Separator Margin="0" Height="2" VerticalAlignment="Bottom"
+                                               HorizontalAlignment="Stretch"
+                                               Style="{DynamicResource MaterialDesignLightSeparator}" />
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
@@ -96,20 +99,30 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <Grid Margin="4">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="35" />
                 <RowDefinition Height="35" />
                 <RowDefinition Height="35" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <materialDesign:ColorZone>
-                <Button Command="{x:Static materialDesign:Transitioner.MoveFirstCommand}"
-                        HorizontalAlignment="Left" Margin="5"
-                        Style="{DynamicResource MaterialDesignToolButton}">
-                    <materialDesign:PackIcon Kind="ArrowLeft" />
-                </Button>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{x:Static materialDesign:Transitioner.MoveFirstCommand}"
+                            HorizontalAlignment="Left" Margin="5"
+                            Style="{DynamicResource MaterialDesignToolButton}">
+                        <materialDesign:PackIcon Kind="ArrowLeft" />
+                    </Button>
+                    <StackPanel Grid.Column="1" Margin="4">
+                        <TextBlock Text="{Binding English}" FontWeight="Bold" FontSize="16" />
+                        <TextBlock Text="{Binding Japanese}" FontWeight="Bold" FontSize="16" />
+                    </StackPanel>
+                </Grid>
             </materialDesign:ColorZone>
             <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="16">Auto Copy</TextBlock>
             <ToggleButton Grid.Row="1" ToolTip="Auto Copy" Margin="5,0" IsChecked="{Binding AutoCopy}"

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using GbfRaidfinder.Data;
 using GbfRaidfinder.Interfaces;
-using GbfRaidfinder.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -22,8 +20,10 @@ namespace GbfRaidfinder.Common {
                     DefaultValueHandling = DefaultValueHandling.Populate,
                     NullValueHandling = NullValueHandling.Ignore
                 };
-                RaidBossListItems = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(input, jsonSettings);
-            } else {
+                RaidBossListItems = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(input,
+                    jsonSettings);
+            }
+            else {
                 RaidBossListItems = new ObservableCollection<RaidListItem>(Raids.RaidBosses);
             }
             Save();

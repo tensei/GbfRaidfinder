@@ -7,12 +7,12 @@ using Newtonsoft.Json.Converters;
 
 namespace GbfRaidfinder.Common {
     internal class SettingsController : ISettingsController {
-        private readonly string ConfigFile = Path.Combine(Directory.GetCurrentDirectory(), "Settings.json");
+        private readonly string _configFile = Path.Combine(Directory.GetCurrentDirectory(), "Settings.json");
         public SettingsModel Settings { get; set; }
 
         public void Load() {
-            if (File.Exists(ConfigFile)) {
-                var input = File.ReadAllText(ConfigFile);
+            if (File.Exists(_configFile)) {
+                var input = File.ReadAllText(_configFile);
 
                 var jsonSettings = new JsonSerializerSettings {
                     ObjectCreationHandling = ObjectCreationHandling.Auto,
@@ -36,12 +36,12 @@ namespace GbfRaidfinder.Common {
             jsonSettings.Converters.Add(new StringEnumConverter {CamelCaseText = true});
             var output = JsonConvert.SerializeObject(Settings, jsonSettings);
 
-            var folder = Path.GetDirectoryName(ConfigFile);
+            var folder = Path.GetDirectoryName(_configFile);
             if (folder != null && !Directory.Exists(folder)) {
                 Directory.CreateDirectory(folder);
             }
             try {
-                File.WriteAllText(ConfigFile, output);
+                File.WriteAllText(_configFile, output);
             }
             catch (Exception) {
                 //ignore

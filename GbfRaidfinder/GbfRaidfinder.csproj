@@ -118,6 +118,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\RaidlistController.cs" />
+    <Compile Include="Factorys\ControllerFactory.cs" />
     <Compile Include="Interfaces\IRaidlistController.cs" />
     <Compile Include="Interfaces\IRaidsController.cs" />
     <Compile Include="Common\RaidsController.cs" />
@@ -125,7 +126,7 @@
     <Compile Include="Common\LoginController.cs" />
     <Compile Include="Interfaces\ISettingsController.cs" />
     <Compile Include="Common\SettingsController.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="Models\FollowModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Interfaces\ITweetObserver.cs" />

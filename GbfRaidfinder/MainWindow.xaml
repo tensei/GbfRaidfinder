@@ -13,9 +13,9 @@
                       xmlns:properties="clr-namespace:GbfRaidfinder.Properties"
                       mc:Ignorable="d"
                       Closing="MainWindow_OnClosing"
-                      Title="Granblue Fantasy Raidfinder" 
+                      Title="Granblue Fantasy Raidfinder"
                       Height="{Binding Source={x:Static properties:Settings.Default},
-                               Path=Height}" 
+                               Path=Height}"
                       Width="{Binding Source={x:Static properties:Settings.Default},
                                Path=Width}"
                       TitleCharacterCasing="Normal"
@@ -79,9 +79,10 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <views:BossView BorderThickness="0,0,1,0" 
-                                    Height="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}"
-                                                MaxHeight="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}" BorderBrush="Black" />
+                                <views:BossView BorderThickness="0,0,1,0"
+                                                Height="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}"
+                                                MaxHeight="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}"
+                                                BorderBrush="Black" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

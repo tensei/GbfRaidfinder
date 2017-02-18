@@ -1,8 +1,9 @@
+using System.Threading.Tasks;
+using Tweetinvi.Models;
+
 namespace GbfRaidfinder.Interfaces {
     public interface ILoginController {
-        ITweetObserver TweetObserver { get; }
         string Pin { get; set; }
-        void StartLogin();
-        void Stop();
+        Task<ITwitterCredentials> StartNewLogin();
     }
 }

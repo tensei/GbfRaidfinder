@@ -19,7 +19,7 @@ namespace GbfRaidfinder {
             container.RegisterInstance<IRaidlistController>(new RaidListController());
             container.RegisterInstance<ITweetProcessor>(new TweetProcessor());
             container.RegisterType<ILoginController, LoginController>();
-            container.RegisterInstance<ITweetObserver>(new TweetObserver());
+            container.RegisterType<ITweetObserver, TweetObserver>();
             container.RegisterType<MainViewModel>();
             container.RegisterType<MainWindow>();
             container.Resolve<MainWindow>().Show();

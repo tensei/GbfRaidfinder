@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace GbfRaidfinder {
+namespace GbfRaidfinder.Common {
     internal static class Extensions {
         public static void RemoveAll<T>(this ObservableCollection<T> collection,
             Func<T, bool> condition) {
