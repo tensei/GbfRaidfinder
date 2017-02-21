@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GbfRaidfinder.Interfaces;
 using Tweetinvi.Models;
@@ -20,7 +21,8 @@ namespace GbfRaidfinder.Twitter {
                     Time = tweet.CreatedAt.ToShortTimeString(),
                     User = tweet.CreatedBy.Name,
                     Boss = tweetreg.Groups[2].Value,
-                    Language = "JP"
+                    Language = "JP",
+                    Text = tweetreg.Groups[1].Value.Trim()
                 };
             }
             tweetreg = Regex.Match(tweet.Text, RaidRegexEnglish);
@@ -33,7 +35,8 @@ namespace GbfRaidfinder.Twitter {
                 Time = tweet.CreatedAt.ToShortTimeString(),
                 User = tweet.CreatedBy.Name,
                 Boss = tweetreg.Groups[2].Value,
-                Language = "EN"
+                Language = "EN",
+                Text = tweetreg.Groups[1].Value.Trim()
             };
             //Clipboard.SetText(id);
         }

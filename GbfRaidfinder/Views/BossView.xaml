@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GbfRaidfinder.Views.BossView"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,9 +8,15 @@
              xmlns:models="clr-namespace:GbfRaidfinder.Models"
              xmlns:gbfRaidfinder="clr-namespace:GbfRaidfinder"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:custom="http://metro.mahapps.com/winfx/xaml/shared"
+             x:Class="GbfRaidfinder.Views.BossView"
              mc:Ignorable="d"
              d:DesignHeight="300" Width="300"
              d:DataContext="{d:DesignInstance {x:Type models:FollowModel}, IsDesignTimeCreatable=False}">
+
+    <UserControl.Resources>
+        <custom:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </UserControl.Resources>
 
     <materialDesign:Transitioner SelectedIndex="0">
         <Grid>
@@ -33,15 +39,13 @@
                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="4"
                                 VerticalAlignment="Center">
                         <Button
-                            Command="{Binding RelativeSource={RelativeSource FindAncestor,
-                                    AncestorType={x:Type gbfRaidfinder:MainWindow}}, Path=DataContext.MoveLeftCommand, Mode=OneTime}"
+                            Command="{Binding DataContext.MoveLeftCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
                             CommandParameter="{Binding}"
                             Style="{DynamicResource MaterialDesignToolButton}">
                             <materialDesign:PackIcon Kind="ArrowLeft" />
                         </Button>
                         <Button
-                            Command="{Binding RelativeSource={RelativeSource FindAncestor,
-                                    AncestorType={x:Type gbfRaidfinder:MainWindow}}, Path=DataContext.MoveRightCommand, Mode=OneTime}"
+                            Command="{Binding DataContext.MoveRightCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
                             CommandParameter="{Binding}"
                             Style="{DynamicResource MaterialDesignToolButton}">
                             <materialDesign:PackIcon Kind="ArrowRight" />
@@ -51,8 +55,7 @@
                             <materialDesign:PackIcon Kind="Settings" />
                         </Button>
                         <Button Style="{DynamicResource MaterialDesignToolButton}"
-                                Command="{Binding RelativeSource={RelativeSource FindAncestor,
-                                    AncestorType={x:Type gbfRaidfinder:MainWindow}}, Path=DataContext.RemoveCommand, Mode=OneTime}"
+                                Command="{Binding DataContext.RemoveCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
                                 CommandParameter="{Binding Japanese}">
                             <materialDesign:PackIcon Kind="Close" />
                         </Button>
@@ -63,19 +66,12 @@
                 <ItemsControl ItemsSource="{Binding Tweets}" HorizontalContentAlignment="Stretch">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Clicked}" Value="true">
-                                    <!--<Setter Property="Foreground" Value="Gray"/>-->
-                                    <Setter Property="Opacity" Value="0.3" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
                             <Grid>
                                 <StackPanel>
-                                    <Button Background="Transparent" BorderThickness="0" Padding="4" Height="30"
-                                            HorizontalContentAlignment="Stretch" Margin="2"
+                                    <Button Background="Transparent" BorderThickness="0" Padding="4" Height="Auto" MinHeight="30"
+                                            HorizontalContentAlignment="Stretch" Margin="2,4,2,2"
                                             VerticalContentAlignment="Center"
-                                            Command="{Binding RelativeSource={RelativeSource FindAncestor,
-                                        AncestorType={x:Type local:BossView}}, Path=DataContext.CopyCommand, Mode=OneTime}"
+                                            Command="{Binding DataContext.CopyCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
                                             CommandParameter="{Binding}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -83,11 +79,20 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
                                             <TextBlock Grid.Column="0" Text="{Binding User}" VerticalAlignment="Center"
-                                                       HorizontalAlignment="Left" />
-                                            <TextBlock Grid.Column="1" Text="{Binding Time}" VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left" TextWrapping="Wrap" />
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Time}" VerticalAlignment="Center"
                                                        HorizontalAlignment="Right" Margin="10,0" />
-                                            <TextBlock Grid.Column="2" Text="{Binding Id}" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Id}" VerticalAlignment="Center" FontWeight="Bold" />
+                                            <materialDesign:Card Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="4" Margin="4,4,4,0"
+                                                                 Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
+                                                                 materialDesign:ShadowAssist.ShadowDepth="Depth2" >
+                                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                                            </materialDesign:Card>
                                         </Grid>
                                     </Button>
                                     <Separator Margin="0" Height="2" VerticalAlignment="Bottom"
@@ -95,6 +100,12 @@
                                                Style="{DynamicResource MaterialDesignLightSeparator}" />
                                 </StackPanel>
                             </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Clicked}" Value="true">
+                                    <!--<Setter Property="Foreground" Value="Gray"/>-->
+                                    <Setter Property="Opacity" Value="0.3" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -126,15 +137,15 @@
                     </StackPanel>
                 </Grid>
             </materialDesign:ColorZone>
-            <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="16">Auto Copy</TextBlock>
+            <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="16"><Run Text="Auto Copy"/></TextBlock>
             <ToggleButton Grid.Row="1" ToolTip="Auto Copy" Margin="5,0" IsChecked="{Binding AutoCopy}"
                           HorizontalAlignment="Right" />
 
-            <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="16">Sound Notifications</TextBlock>
+            <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="16"><Run Text="Sound Notifications"/></TextBlock>
             <ToggleButton Grid.Row="2" ToolTip="Sound Notifications" Margin="5,0" IsChecked="{Binding Sound}"
                           HorizontalAlignment="Right" />
 
-            <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16">Sound</TextBlock>
+            <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16"><Run Text="Sound"/></TextBlock>
             <ComboBox Grid.Row="3" Margin="5,0" ItemsSource="{Binding SoundFiles}" SelectedItem="{Binding SelectedSoundFile}"
                       HorizontalAlignment="Right"  Width="200"
                       SelectedIndex="{Binding SelectedSoundFileIndex}">
@@ -145,7 +156,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBlock Grid.Row="4" VerticalAlignment="Center" FontSize="16">Image</TextBlock>
+            <TextBlock Grid.Row="4" VerticalAlignment="Center" FontSize="16"><Run Text="Image"/></TextBlock>
             <ToggleButton Grid.Row="4" ToolTip="Toggle Image" Margin="5,0" IsChecked="{Binding ImageVisibility}"
                           HorizontalAlignment="Right" />
         </Grid>

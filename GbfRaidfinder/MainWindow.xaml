@@ -14,6 +14,11 @@
                       mc:Ignorable="d"
                       Closing="MainWindow_OnClosing"
                       Title="Granblue Fantasy Raidfinder"
+                      
+                      TextElement.FontWeight="Medium"
+                      TextElement.FontSize="14"
+                      FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto,Helvetica,Arial"
+      
                       Height="{Binding Source={x:Static properties:Settings.Default},
                                Path=Height}"
                       Width="{Binding Source={x:Static properties:Settings.Default},
