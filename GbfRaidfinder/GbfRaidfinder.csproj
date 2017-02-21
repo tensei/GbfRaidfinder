@@ -117,6 +117,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\ExceptionHandler.cs" />
     <Compile Include="Common\RaidlistController.cs" />
     <Compile Include="Factorys\ControllerFactory.cs" />
     <Compile Include="Interfaces\IRaidlistController.cs" />

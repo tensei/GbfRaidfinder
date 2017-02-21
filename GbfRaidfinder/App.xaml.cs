@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using GbfRaidfinder.Common;
 using GbfRaidfinder.Data;
 using GbfRaidfinder.Interfaces;
@@ -12,6 +13,9 @@ namespace GbfRaidfinder {
     /// </summary>
     public partial class App : Application {
         private void AppStartup(object sender, StartupEventArgs args) {
+            if (!Debugger.IsAttached)
+                ExceptionHandler.AddGlobalHandlers();
+
             var container = new UnityContainer();
             container.RegisterType<Raids>();
             container.RegisterInstance<ISettingsController>(new SettingsController());
