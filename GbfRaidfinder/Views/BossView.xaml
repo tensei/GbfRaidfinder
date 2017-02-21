@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:models="clr-namespace:GbfRaidfinder.Models"
              xmlns:gbfRaidfinder="clr-namespace:GbfRaidfinder"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="300" Width="300"
              d:DataContext="{d:DesignInstance {x:Type models:FollowModel}, IsDesignTimeCreatable=False}">
@@ -105,6 +106,7 @@
                 <RowDefinition Height="35" />
                 <RowDefinition Height="35" />
                 <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <materialDesign:ColorZone>
@@ -132,10 +134,20 @@
             <ToggleButton Grid.Row="2" ToolTip="Sound Notifications" Margin="5,0" IsChecked="{Binding Sound}"
                           HorizontalAlignment="Right" />
 
-            <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16">Image</TextBlock>
-            <ToggleButton Grid.Row="3" ToolTip="Toggle Image" Margin="5,0" IsChecked="{Binding ImageVisibility}"
-                          HorizontalAlignment="Right" />
+            <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16">Sound</TextBlock>
+            <ComboBox Grid.Row="3" Margin="5,0" ItemsSource="{Binding SoundFiles}" SelectedItem="{Binding SelectedSoundFile}"
+                      HorizontalAlignment="Right"  Width="200"
+                      SelectedIndex="{Binding SelectedSoundFileIndex}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:SoundFileModel}">
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
+            <TextBlock Grid.Row="4" VerticalAlignment="Center" FontSize="16">Image</TextBlock>
+            <ToggleButton Grid.Row="4" ToolTip="Toggle Image" Margin="5,0" IsChecked="{Binding ImageVisibility}"
+                          HorizontalAlignment="Right" />
         </Grid>
     </materialDesign:Transitioner>
 </UserControl>

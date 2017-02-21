@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows;
@@ -104,20 +106,21 @@ namespace GbfRaidfinder.ViewModels {
                     var follow =
                         _raidsController.Follows.FirstOrDefault(
                             f => f.English.Contains(tweet.Boss.Trim()) || f.Japanese.Contains(tweet.Boss.Trim()));
-                    follow?._TweetInfos.Insert(0, tweet);
+                    follow?.TweetInfos.Insert(0, tweet);
                     if (follow != null && follow.AutoCopy) {
                         Clipboard.SetText(tweet.Id);
                     }
                     if (follow != null && follow.Sound) {
                         try {
+                            _soudplayer.SoundLocation = follow.SelectedSoundFile?.Path;
                             _soudplayer.Play();
                         }
                         catch (Exception) {
                             //no file
                         }
                     }
-                    if (follow?._TweetInfos.Count > 30) {
-                        follow._TweetInfos.RemoveAt(follow._TweetInfos.Count - 1);
+                    if (follow?.TweetInfos.Count > 30) {
+                        follow.TweetInfos.RemoveAt(follow.TweetInfos.Count - 1);
                     }
                 }));
             }

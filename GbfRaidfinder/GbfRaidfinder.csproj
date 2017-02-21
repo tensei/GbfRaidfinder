@@ -132,6 +132,7 @@
     <Compile Include="Interfaces\ITweetObserver.cs" />
     <Compile Include="Interfaces\ITweetProcessor.cs" />
     <Compile Include="Interfaces\ITweetInfo.cs" />
+    <Compile Include="Models\SoundFileModel.cs" />
     <Compile Include="Twitter\TweetInfo.cs" />
     <Compile Include="Twitter\TweetObserver.cs" />
     <Compile Include="Twitter\TweetProcessor.cs" />
