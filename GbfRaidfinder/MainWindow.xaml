@@ -92,7 +92,7 @@
                                           ToolTip="Enable/Disable Auto Copy globally" />
                             <TextBlock>Global Sound</TextBlock>
                             <ToggleButton Margin="5,0" IsChecked="{Binding Settings.GlobalSound}"
-                                          ToolTip="Enable/Disable Auto Copy globally" />
+                                          ToolTip="Enable/Disable Sound globally" />
                         </StackPanel>
                         <TextBlock Grid.Column="2">Raid height</TextBlock>
                         <Slider Grid.Column="3" Margin="5,0" x:Name="slider"
