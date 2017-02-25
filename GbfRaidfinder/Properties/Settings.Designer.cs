@@ -46,5 +46,29 @@ namespace GbfRaidfinder.Properties {
                 this["Width"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("400")]
+        public double BossViewHeight {
+            get {
+                return ((double)(this["BossViewHeight"]));
+            }
+            set {
+                this["BossViewHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool GlobalCopy {
+            get {
+                return ((bool)(this["GlobalCopy"]));
+            }
+            set {
+                this["GlobalCopy"] = value;
+            }
+        }
     }
 }

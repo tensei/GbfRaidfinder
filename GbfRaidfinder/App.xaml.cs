@@ -13,8 +13,9 @@ namespace GbfRaidfinder {
     /// </summary>
     public partial class App : Application {
         private void AppStartup(object sender, StartupEventArgs args) {
-            if (!Debugger.IsAttached)
+            if (!Debugger.IsAttached) {
                 ExceptionHandler.AddGlobalHandlers();
+            }
 
             var container = new UnityContainer();
             container.RegisterType<Raids>();

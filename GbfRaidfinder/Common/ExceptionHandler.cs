@@ -9,15 +9,17 @@ namespace GbfRaidfinder.Common {
         public static void AddGlobalHandlers() {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => {
                 try {
-                    if (!Directory.Exists(LogsPath))
+                    if (!Directory.Exists(LogsPath)) {
                         Directory.CreateDirectory(LogsPath);
+                    }
 
                     var filePath = Path.Combine(LogsPath,
                         $"UnhandledException_{DateTime.Now.ToShortDateString().Replace("/", "-")}.json");
 
                     File.AppendAllText(filePath,
                         JsonConvert.SerializeObject(args.ExceptionObject, Formatting.Indented) + "\r\n\r\n");
-                } catch {
+                }
+                catch {
                     // ignored
                 }
             };

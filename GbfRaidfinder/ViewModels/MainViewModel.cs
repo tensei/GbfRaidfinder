@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows;
@@ -12,17 +10,23 @@ using GbfRaidfinder.Factorys;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Models;
 using GbfRaidfinder.Twitter;
+using PropertyChanged;
 using Tweetinvi.Events;
 using Tweetinvi.Models;
 
 namespace GbfRaidfinder.ViewModels {
+    [ImplementPropertyChanged]
     public class MainViewModel {
-        private readonly IRaidsController _raidsController;
-        private readonly SoundPlayer _soudplayer = new SoundPlayer(@"assets\notification.wav");
-        private readonly ITweetProcessor _tweetProcessor;
         private readonly ILoginController _loginController;
-        private readonly ITweetObserver _tweetObserver;
+        private readonly IRaidsController _raidsController;
         private readonly ISettingsController _settingsController;
+        private readonly SoundPlayer _soudplayer = new SoundPlayer(@"assets\notification.wav");
+        private readonly ITweetObserver _tweetObserver;
+        private readonly ITweetProcessor _tweetProcessor;
+
+        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
+            "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
+
         public MainViewModel(ITweetProcessor tweetProcessor, ControllerFactory controllerFactory) {
             _tweetProcessor = tweetProcessor;
             _raidsController = controllerFactory.GetRaidsController;
@@ -30,8 +34,9 @@ namespace GbfRaidfinder.ViewModels {
             _tweetObserver = controllerFactory.GetTweetObserver;
             _settingsController = controllerFactory.GetSettingsController;
             Follows = new ReadOnlyObservableCollection<FollowModel>(_raidsController.Follows);
-            RaidBosses = new ReadOnlyObservableCollection<RaidListItem>(controllerFactory.GetRaidlistController.RaidBossListItems);
-
+            RaidBosses =
+                new ReadOnlyObservableCollection<RaidListItem>(controllerFactory.GetRaidlistController.RaidBossListItems);
+            Settings = _settingsController.Settings;
             AddCommand = new ActionCommand(r => Add((RaidListItem) r));
             RemoveCommand = new ActionCommand(r => Remove((string) r));
             StartLoginCommand = new ActionCommand(() => _loginController.StartNewLogin());
@@ -45,7 +50,7 @@ namespace GbfRaidfinder.ViewModels {
             Startup();
         }
 
-
+        public SettingsModel Settings { get; set; }
 
         public ReadOnlyObservableCollection<FollowModel> Follows { get; }
         public ReadOnlyObservableCollection<RaidListItem> RaidBosses { get; }
@@ -57,8 +62,7 @@ namespace GbfRaidfinder.ViewModels {
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
 
-        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
-            "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
+
         private void Startup() {
             if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) &&
                 string.IsNullOrWhiteSpace(_settingsController.Settings.AccessTokenSecret)) {
@@ -68,13 +72,15 @@ namespace GbfRaidfinder.ViewModels {
             _twitterCredentials.AccessToken = _settingsController.Settings.AccessToken;
             _tweetObserver.Run(_twitterCredentials);
         }
+
         private void StreamOnDisconnectMessageReceived(object sender, DisconnectedEventArgs disconnectedEventArgs) {
             _tweetObserver.Running = false;
             Startup();
         }
 
         private void StreamOnStreamStopped(object sender, StreamExceptionEventArgs streamExceptionEventArgs) {
-            var ok = MessageBox.Show("Something went wrong relog please!", "Error", MessageBoxButton.OKCancel, MessageBoxImage.Error);
+            var ok = MessageBox.Show("Something went wrong relog please!", "Error", MessageBoxButton.OKCancel,
+                MessageBoxImage.Error);
             if (ok != MessageBoxResult.OK) {
                 return;
             }
@@ -83,6 +89,7 @@ namespace GbfRaidfinder.ViewModels {
                 _tweetObserver.Run(creds);
             }));
         }
+
         private void StreamOnNonMatchingTweetReceived(object sender, TweetEventArgs tweetEventArgs) {
             var tweet = _tweetProcessor.RecievedTweetInfo(tweetEventArgs.Tweet);
             if (tweet == null) {
@@ -107,10 +114,10 @@ namespace GbfRaidfinder.ViewModels {
                         _raidsController.Follows.FirstOrDefault(
                             f => f.English.Contains(tweet.Boss.Trim()) || f.Japanese.Contains(tweet.Boss.Trim()));
                     follow?.TweetInfos.Insert(0, tweet);
-                    if (follow != null && follow.AutoCopy) {
+                    if (follow != null && follow.AutoCopy && Settings.GlobalCopy) {
                         Clipboard.SetText(tweet.Id);
                     }
-                    if (follow != null && follow.Sound) {
+                    if (follow != null && follow.Sound && Settings.GlobalSound) {
                         try {
                             _soudplayer.SoundLocation = follow.SelectedSoundFile?.Path;
                             _soudplayer.Play();

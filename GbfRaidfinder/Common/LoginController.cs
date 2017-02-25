@@ -17,7 +17,7 @@ namespace GbfRaidfinder.Common {
         public LoginController(ISettingsController settingsController) {
             _settingsController = settingsController;
         }
-        
+
         public string Pin { get; set; }
 
         public async Task<ITwitterCredentials> StartNewLogin() {

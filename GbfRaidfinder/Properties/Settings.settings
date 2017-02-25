@@ -10,5 +10,11 @@
     <Setting Name="Width" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1000</Value>
     </Setting>
+    <Setting Name="BossViewHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">400</Value>
+    </Setting>
+    <Setting Name="GlobalCopy" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -1,21 +1,21 @@
 ﻿<UserControl
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:GbfRaidfinder.Views"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:models="clr-namespace:GbfRaidfinder.Models"
-             xmlns:gbfRaidfinder="clr-namespace:GbfRaidfinder"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
-             xmlns:custom="http://metro.mahapps.com/winfx/xaml/shared"
-             x:Class="GbfRaidfinder.Views.BossView"
-             mc:Ignorable="d"
-             d:DesignHeight="300" Width="300"
-             d:DataContext="{d:DesignInstance {x:Type models:FollowModel}, IsDesignTimeCreatable=False}">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:GbfRaidfinder.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:models="clr-namespace:GbfRaidfinder.Models"
+    xmlns:gbfRaidfinder="clr-namespace:GbfRaidfinder"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:custom="http://metro.mahapps.com/winfx/xaml/shared"
+    x:Class="GbfRaidfinder.Views.BossView"
+    mc:Ignorable="d"
+    d:DesignHeight="300" Width="300"
+    d:DataContext="{d:DesignInstance {x:Type models:FollowModel}, IsDesignTimeCreatable=False}">
 
     <UserControl.Resources>
-        <custom:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <custom:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </UserControl.Resources>
 
     <materialDesign:Transitioner SelectedIndex="0">
@@ -68,7 +68,8 @@
                         <DataTemplate>
                             <Grid>
                                 <StackPanel>
-                                    <Button Background="Transparent" BorderThickness="0" Padding="4" Height="Auto" MinHeight="30"
+                                    <Button Background="Transparent" BorderThickness="0" Padding="4" Height="Auto"
+                                            MinHeight="30"
                                             HorizontalContentAlignment="Stretch" Margin="2,4,2,2"
                                             VerticalContentAlignment="Center"
                                             Command="{Binding DataContext.CopyCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
@@ -80,18 +81,21 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Column="0" Text="{Binding User}" VerticalAlignment="Center"
                                                        HorizontalAlignment="Left" TextWrapping="Wrap" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Time}" VerticalAlignment="Center"
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Time}"
+                                                       VerticalAlignment="Center"
                                                        HorizontalAlignment="Right" Margin="10,0" />
-                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Id}" VerticalAlignment="Center" FontWeight="Bold" />
-                                            <materialDesign:Card Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="4" Margin="4,4,4,0"
+                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Id}"
+                                                       VerticalAlignment="Center" FontWeight="Bold" />
+                                            <materialDesign:Card Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                                 Padding="4" Margin="4,4,4,0"
                                                                  Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
-                                                                 materialDesign:ShadowAssist.ShadowDepth="Depth2" >
-                                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                                                                 materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
                                             </materialDesign:Card>
                                         </Grid>
                                     </Button>
@@ -123,8 +127,8 @@
             <materialDesign:ColorZone>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Button Command="{x:Static materialDesign:Transitioner.MoveFirstCommand}"
                             HorizontalAlignment="Left" Margin="5"
@@ -137,26 +141,35 @@
                     </StackPanel>
                 </Grid>
             </materialDesign:ColorZone>
-            <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="16"><Run Text="Auto Copy"/></TextBlock>
+            <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="16">
+                <Run Text="Auto Copy" />
+            </TextBlock>
             <ToggleButton Grid.Row="1" ToolTip="Auto Copy" Margin="5,0" IsChecked="{Binding AutoCopy}"
                           HorizontalAlignment="Right" />
 
-            <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="16"><Run Text="Sound Notifications"/></TextBlock>
+            <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="16">
+                <Run Text="Sound Notifications" />
+            </TextBlock>
             <ToggleButton Grid.Row="2" ToolTip="Sound Notifications" Margin="5,0" IsChecked="{Binding Sound}"
                           HorizontalAlignment="Right" />
 
-            <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16"><Run Text="Sound"/></TextBlock>
-            <ComboBox Grid.Row="3" Margin="5,0" ItemsSource="{Binding SoundFiles}" SelectedItem="{Binding SelectedSoundFile}"
-                      HorizontalAlignment="Right"  Width="200"
+            <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16">
+                <Run Text="Sound" />
+            </TextBlock>
+            <ComboBox Grid.Row="3" Margin="5,0" ItemsSource="{Binding SoundFiles}"
+                      SelectedItem="{Binding SelectedSoundFile}"
+                      HorizontalAlignment="Right" Width="200"
                       SelectedIndex="{Binding SelectedSoundFileIndex}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:SoundFileModel}">
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBlock Grid.Row="4" VerticalAlignment="Center" FontSize="16"><Run Text="Image"/></TextBlock>
+            <TextBlock Grid.Row="4" VerticalAlignment="Center" FontSize="16">
+                <Run Text="Image" />
+            </TextBlock>
             <ToggleButton Grid.Row="4" ToolTip="Toggle Image" Margin="5,0" IsChecked="{Binding ImageVisibility}"
                           HorizontalAlignment="Right" />
         </Grid>

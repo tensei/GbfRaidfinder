@@ -14,11 +14,10 @@
                       mc:Ignorable="d"
                       Closing="MainWindow_OnClosing"
                       Title="Granblue Fantasy Raidfinder"
-                      
                       TextElement.FontWeight="Medium"
                       TextElement.FontSize="14"
                       FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto,Helvetica,Arial"
-      
+
                       Height="{Binding Source={x:Static properties:Settings.Default},
                                Path=Height}"
                       Width="{Binding Source={x:Static properties:Settings.Default},
@@ -75,24 +74,48 @@
                 </Grid>
             </materialDesign:DrawerHost.LeftDrawerContent>
             <Grid>
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                    <ItemsControl x:Name="itemsControl" ItemsSource="{Binding Follows}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <materialDesign:ColorZone Grid.Row="0" Padding="6">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock>Global Copy</TextBlock>
+                            <ToggleButton Margin="5,0" IsChecked="{Binding Settings.GlobalCopy}"
+                                          ToolTip="Enable/Disable Auto Copy globally" />
+                            <TextBlock>Global Sound</TextBlock>
+                            <ToggleButton Margin="5,0" IsChecked="{Binding Settings.GlobalSound}"
+                                          ToolTip="Enable/Disable Auto Copy globally" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="2">Raid height</TextBlock>
+                        <Slider Grid.Column="3" Margin="5,0" x:Name="slider"
+                                Maximum="{Binding ActualHeight, ElementName=Itemscontrol, Mode=OneWay}" Minimum="100"
+                                Value="400" />
+                    </Grid>
+                </materialDesign:ColorZone>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Follows}" VerticalAlignment="Stretch">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" IsItemsHost="True" />
+                                <WrapPanel HorizontalAlignment="Stretch" IsItemsHost="True" Orientation="Vertical" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <views:BossView BorderThickness="0,0,1,0"
-                                                Height="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}"
-                                                MaxHeight="{Binding ActualHeight, ElementName=itemsControl, Mode=OneWay}"
-                                                BorderBrush="Black" />
+                                <views:BossView x:Name="Bossview" BorderThickness="0,0,1,1"
+                                                BorderBrush="Black" Height="{Binding Value, ElementName=slider}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-                <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}"
+                <ToggleButton Grid.Row="1" Style="{StaticResource MaterialDesignActionToggleButton}"
                               IsChecked="False" Margin="16" Height="50" Width="50"
                               x:Name="MenuToggleButton" HorizontalAlignment="Right"
                               VerticalAlignment="Bottom">
@@ -103,7 +126,7 @@
                         <materialDesign:PackIcon Kind="ArrowLeft" />
                     </materialDesign:ToggleButtonAssist.OnContent>
                 </ToggleButton>
-                <tb:TaskbarIcon x:Name="TaskbarNotifyIcon" IconSource="Assets/testicon.ico" />
+                <tb:TaskbarIcon Grid.Row="0" x:Name="TaskbarNotifyIcon" IconSource="Assets/testicon.ico" />
             </Grid>
         </materialDesign:DrawerHost>
     </materialDesign:DialogHost>

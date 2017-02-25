@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using GbfRaidfinder.Data;
 using GbfRaidfinder.Factorys;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Properties;
@@ -16,11 +15,14 @@ namespace GbfRaidfinder {
             _controllerFactory = controllerFactory;
             InitializeComponent();
             DataContext = new MainViewModel(tweetProcessor, controllerFactory);
+            slider.Value = Settings.Default.BossViewHeight;
         }
+
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e) {
             Settings.Default.Height = Height;
             Settings.Default.Width = Width;
+            Settings.Default.BossViewHeight = slider.Value;
             Settings.Default.Save();
             _controllerFactory.GetSettingsController.Save();
             _controllerFactory.GetRaidlistController.Save();

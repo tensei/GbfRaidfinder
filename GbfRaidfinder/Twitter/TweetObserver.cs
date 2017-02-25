@@ -4,7 +4,6 @@ using System.Windows;
 using GbfRaidfinder.Interfaces;
 using PropertyChanged;
 using Tweetinvi;
-using Tweetinvi.Events;
 using Tweetinvi.Exceptions;
 using Tweetinvi.Models;
 using Tweetinvi.Streaming;
@@ -12,7 +11,6 @@ using Tweetinvi.Streaming;
 namespace GbfRaidfinder.Twitter {
     [ImplementPropertyChanged]
     public class TweetObserver : ITweetObserver {
-        public IFilteredStream Stream { get; }
         private readonly ISettingsController _settingsController;
 
         public TweetObserver(ISettingsController settingsController) {
@@ -20,10 +18,11 @@ namespace GbfRaidfinder.Twitter {
             _settingsController = settingsController;
         }
 
+        public IFilteredStream Stream { get; }
+
         public bool Running { get; set; }
 
         public void Run(ITwitterCredentials userCredentials) {
-
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackOnly;
             Stream.Credentials = userCredentials;
             for (var i = 5; i < 151; i += 5) {
@@ -33,7 +32,7 @@ namespace GbfRaidfinder.Twitter {
             //stream.AddTrack("Lv");
             Start();
         }
-        
+
         private async void Start() {
             await Task.Delay(3000);
             try {
@@ -51,6 +50,5 @@ namespace GbfRaidfinder.Twitter {
                 Running = false;
             }
         }
-        
     }
 }
