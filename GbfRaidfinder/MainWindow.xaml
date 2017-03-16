@@ -96,7 +96,7 @@
                         </StackPanel>
                         <TextBlock Grid.Column="2">Raid height</TextBlock>
                         <Slider Grid.Column="3" Margin="5,0" x:Name="slider"
-                                Maximum="{Binding ActualHeight, ElementName=Itemscontrol, Mode=OneWay}" Minimum="100"
+                                Maximum="1000" Minimum="100"
                                 Value="400" />
                     </Grid>
                 </materialDesign:ColorZone>

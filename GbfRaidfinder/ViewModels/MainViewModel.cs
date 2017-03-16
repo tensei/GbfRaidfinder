@@ -118,7 +118,7 @@ namespace GbfRaidfinder.ViewModels {
                         try {
                             Clipboard.SetDataObject(tweet.Id);
                         }
-                        catch {
+                        catch (Exception){
                             //ignore
                         }
                     }
