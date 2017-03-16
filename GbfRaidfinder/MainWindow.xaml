@@ -57,8 +57,22 @@
                                         </Grid.ColumnDefinitions>
                                         <Image Source="{Binding Image}" Grid.ColumnSpan="2" Stretch="UniformToFill" />
                                         <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="5,0">
-                                            <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold" />
-                                            <TextBlock Text="{Binding Japanese}" FontWeight="Bold" />
+                                            <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold">
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect ShadowDepth="0"
+                                                                      Color="Black"
+                                                                      Opacity="1"
+                                                                      BlurRadius="5"/>
+                                                </TextBlock.Effect>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding Japanese}" FontWeight="Bold" >
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect ShadowDepth="0"
+                                                                      Color="Black"
+                                                                      Opacity="1"
+                                                                      BlurRadius="5"/>
+                                                </TextBlock.Effect>
+                                            </TextBlock>
                                         </StackPanel>
                                         <Button Grid.Column="1" Margin="5,0"
                                                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}, Path=DataContext.AddCommand, Mode=OneTime}"
