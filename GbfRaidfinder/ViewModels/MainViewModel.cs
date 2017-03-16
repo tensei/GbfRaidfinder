@@ -115,7 +115,12 @@ namespace GbfRaidfinder.ViewModels {
                             f => f.English.Contains(tweet.Boss.Trim()) || f.Japanese.Contains(tweet.Boss.Trim()));
                     follow?.TweetInfos.Insert(0, tweet);
                     if (follow != null && follow.AutoCopy && Settings.GlobalCopy) {
-                        Clipboard.SetText(tweet.Id);
+                        try {
+                            Clipboard.SetDataObject(tweet.Id);
+                        }
+                        catch {
+                            //ignore
+                        }
                     }
                     if (follow != null && follow.Sound && Settings.GlobalSound) {
                         try {

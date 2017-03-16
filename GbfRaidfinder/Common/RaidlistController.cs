@@ -5,6 +5,8 @@ using GbfRaidfinder.Data;
 using GbfRaidfinder.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Net;
+using System.Text;
 
 namespace GbfRaidfinder.Common {
     public class RaidListController : IRaidlistController {
@@ -12,6 +14,18 @@ namespace GbfRaidfinder.Common {
         public ObservableCollection<RaidListItem> RaidBossListItems { get; set; }
 
         public void Load() {
+            try{
+                var web = new WebClient {
+                    Encoding = Encoding.UTF8
+                };
+                var js = web.DownloadString("https://raw.githubusercontent.com/tensei/GbfRaidfinder/master/List/Raidlist.json");
+
+                RaidBossListItems = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(js);
+                Save();
+                return;
+            } catch {
+                //ignore
+            }
             if (File.Exists(_configFile)) {
                 var input = File.ReadAllText(_configFile);
 
