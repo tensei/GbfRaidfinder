@@ -88,6 +88,13 @@
                                             VerticalContentAlignment="Center"
                                             Command="{Binding DataContext.CopyCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
                                             CommandParameter="{Binding}">
+                                        <!--<Button.ContextMenu>
+                                            <ContextMenu DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource=Self}">
+                                                <MenuItem Header="Blacklist User"
+                                                          Command="{Binding DataContext.BlacklistCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
+                                                          CommandParameter="{Binding User}"/>
+                                            </ContextMenu>
+                                        </Button.ContextMenu>-->
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />

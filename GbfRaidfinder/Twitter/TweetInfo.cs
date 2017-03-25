@@ -1,4 +1,5 @@
-﻿using GbfRaidfinder.Interfaces;
+﻿using System.Windows.Input;
+using GbfRaidfinder.Interfaces;
 using PropertyChanged;
 
 namespace GbfRaidfinder.Twitter {

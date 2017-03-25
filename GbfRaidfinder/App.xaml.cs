@@ -20,6 +20,7 @@ namespace GbfRaidfinder {
             var container = new UnityContainer();
             container.RegisterType<Raids>();
             container.RegisterInstance<ISettingsController>(new SettingsController());
+            container.RegisterInstance<IBlacklistController>(new BlacklistController());
             container.RegisterInstance<IRaidsController>(new RaidsController());
             container.RegisterInstance<IRaidlistController>(new RaidListController());
             container.RegisterInstance<ITweetProcessor>(new TweetProcessor());

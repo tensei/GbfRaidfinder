@@ -11,6 +11,7 @@
                       xmlns:data="clr-namespace:GbfRaidfinder.Data;assembly=GbfRaidfinder.Data"
                       xmlns:tb="http://www.hardcodet.net/taskbar"
                       xmlns:properties="clr-namespace:GbfRaidfinder.Properties"
+                      xmlns:dd="urn:gong-wpf-dragdrop"
                       mc:Ignorable="d"
                       Closing="MainWindow_OnClosing"
                       Title="Granblue Fantasy Raidfinder"
@@ -115,7 +116,9 @@
                     </Grid>
                 </materialDesign:ColorZone>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding Follows}" VerticalAlignment="Stretch">
+                    <ItemsControl ItemsSource="{Binding Follows}" VerticalAlignment="Stretch"
+                                      dd:DragDrop.IsDragSource="True"
+                                      dd:DragDrop.IsDropTarget="True">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel HorizontalAlignment="Stretch" IsItemsHost="True" Orientation="Vertical" />

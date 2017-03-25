@@ -39,6 +39,9 @@
     <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
+    </Reference>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
     </Reference>
@@ -117,7 +120,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\BlacklistController.cs" />
     <Compile Include="Common\ExceptionHandler.cs" />
+    <Compile Include="Interfaces\IBlacklistController.cs" />
     <Compile Include="Common\RaidlistController.cs" />
     <Compile Include="Factorys\ControllerFactory.cs" />
     <Compile Include="Interfaces\IRaidlistController.cs" />
@@ -128,6 +133,7 @@
     <Compile Include="Interfaces\ISettingsController.cs" />
     <Compile Include="Common\SettingsController.cs" />
     <Compile Include="Common\Extensions.cs" />
+    <Compile Include="Models\BlacklistModel.cs" />
     <Compile Include="Models\FollowModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Interfaces\ITweetObserver.cs" />

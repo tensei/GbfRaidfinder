@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Media;
+using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using GbfRaidfinder.Common;
@@ -23,6 +25,7 @@ namespace GbfRaidfinder.ViewModels {
         private readonly SoundPlayer _soudplayer = new SoundPlayer(@"assets\notification.wav");
         private readonly ITweetObserver _tweetObserver;
         private readonly ITweetProcessor _tweetProcessor;
+        private readonly IBlacklistController _blacklistController;
 
         private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
             "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
@@ -33,7 +36,8 @@ namespace GbfRaidfinder.ViewModels {
             _loginController = controllerFactory.CreateLoginController;
             _tweetObserver = controllerFactory.GetTweetObserver;
             _settingsController = controllerFactory.GetSettingsController;
-            Follows = new ReadOnlyObservableCollection<FollowModel>(_raidsController.Follows);
+            _blacklistController = controllerFactory.GetBlacklistController;
+            Follows = _raidsController.Follows;
             RaidBosses =
                 new ReadOnlyObservableCollection<RaidListItem>(controllerFactory.GetRaidlistController.RaidBossListItems);
             Settings = _settingsController.Settings;
@@ -52,7 +56,7 @@ namespace GbfRaidfinder.ViewModels {
 
         public SettingsModel Settings { get; set; }
 
-        public ReadOnlyObservableCollection<FollowModel> Follows { get; }
+        public ObservableCollection<FollowModel> Follows { get; }
         public ReadOnlyObservableCollection<RaidListItem> RaidBosses { get; }
 
         public ICommand StartLoginCommand { get; }
@@ -61,7 +65,7 @@ namespace GbfRaidfinder.ViewModels {
         public ICommand RemoveCommand { get; }
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
-
+        public ICommand BlacklistCommand { get; }
 
         private void Startup() {
             if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) &&
@@ -106,13 +110,34 @@ namespace GbfRaidfinder.ViewModels {
             AddTweet(tweet);
         }
 
-
+        private readonly WebClient _webClient = new WebClient();
+        private async Task<string> TranslateMessage(string msg) {
+            const string target = "en";
+            const string source = "ja";
+            const string key = "AIzaSyD90dAsVVF9iXFK0GIK56BoKEcanDlACMs";
+            var link = $"https://translation.googleapis.com/language/translate/v2?key={key}&source={source}&target={target}&q={msg}";
+            
+            try {
+                var response = await _webClient.DownloadStringTaskAsync(new Uri(link));
+                return response;
+            }
+            catch (WebException e) {
+                Console.WriteLine(e.Status);
+            }
+            return msg;
+        }
         private void AddTweet(TweetInfo tweet) {
             try {
                 Application.Current.Dispatcher.BeginInvoke(new Action(() => {
                     var follow =
                         _raidsController.Follows.FirstOrDefault(
                             f => f.English.Contains(tweet.Boss.Trim()) || f.Japanese.Contains(tweet.Boss.Trim()));
+                    //if (!string.IsNullOrWhiteSpace(tweet.Text) && follow != null) {
+                    //    tweet.Text = await TranslateMessage(tweet.Text);
+                    //}
+                    if (_blacklistController.Blacklist.Users.Contains(tweet.User)) {
+                        return;
+                    }
                     follow?.TweetInfos.Insert(0, tweet);
                     if (follow != null && follow.AutoCopy && Settings.GlobalCopy) {
                         try {
@@ -146,7 +171,7 @@ namespace GbfRaidfinder.ViewModels {
                 if (_raidsController.Follows.Select(f => f.English).ToList().Contains(raidBoss.English)) {
                     return;
                 }
-                _raidsController.Follows.Add(new FollowModel(raidBoss.Japanese, raidBoss.English, raidBoss.Image));
+                _raidsController.Follows.Add(new FollowModel(raidBoss.Japanese, raidBoss.English, raidBoss.Image, _blacklistController));
                 _raidsController.Save();
             }
             catch (Exception e) {

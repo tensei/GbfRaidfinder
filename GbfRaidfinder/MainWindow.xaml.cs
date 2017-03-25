@@ -27,6 +27,7 @@ namespace GbfRaidfinder {
             _controllerFactory.GetSettingsController.Save();
             _controllerFactory.GetRaidlistController.Save();
             _controllerFactory.GetRaidsController.Save();
+            _controllerFactory.GetBlacklistController.Save();
         }
     }
 }
