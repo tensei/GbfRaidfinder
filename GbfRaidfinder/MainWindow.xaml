@@ -36,58 +36,6 @@
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
     <materialDesign:DialogHost>
-        <materialDesign:DrawerHost
-            IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}">
-            <materialDesign:DrawerHost.LeftDrawerContent>
-                <Grid Width="300">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-                                  HorizontalAlignment="Right" Margin="16"
-                                  IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
-                    <ScrollViewer Grid.Row="1">
-                        <ItemsControl ItemsSource="{Binding RaidBosses}" HorizontalContentAlignment="Stretch">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type data:RaidListItem}">
-                                    <Grid Height="60">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Source="{Binding Image}" Grid.ColumnSpan="2" Stretch="UniformToFill" />
-                                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="5,0">
-                                            <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold">
-                                                <TextBlock.Effect>
-                                                    <DropShadowEffect ShadowDepth="0"
-                                                                      Color="Black"
-                                                                      Opacity="1"
-                                                                      BlurRadius="5"/>
-                                                </TextBlock.Effect>
-                                            </TextBlock>
-                                            <TextBlock Text="{Binding Japanese}" FontWeight="Bold" >
-                                                <TextBlock.Effect>
-                                                    <DropShadowEffect ShadowDepth="0"
-                                                                      Color="Black"
-                                                                      Opacity="1"
-                                                                      BlurRadius="5"/>
-                                                </TextBlock.Effect>
-                                            </TextBlock>
-                                        </StackPanel>
-                                        <Button Grid.Column="1" Margin="5,0"
-                                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}, Path=DataContext.AddCommand, Mode=OneTime}"
-                                                CommandParameter="{Binding}"
-                                                Style="{DynamicResource MaterialDesignFloatingActionDarkButton}">
-                                            <materialDesign:PackIcon Kind="Plus" Height="24" Width="24" />
-                                        </Button>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </materialDesign:DrawerHost.LeftDrawerContent>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -115,13 +63,13 @@
                                 Value="400" />
                     </Grid>
                 </materialDesign:ColorZone>
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" >
                     <ItemsControl ItemsSource="{Binding Follows}" VerticalAlignment="Stretch"
                                       dd:DragDrop.IsDragSource="True"
                                       dd:DragDrop.IsDropTarget="True">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel HorizontalAlignment="Stretch" IsItemsHost="True" Orientation="Vertical" />
+                                <WrapPanel HorizontalAlignment="Stretch" IsItemsHost="True" Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -132,19 +80,12 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-                <ToggleButton Grid.Row="1" Style="{StaticResource MaterialDesignActionToggleButton}"
-                              IsChecked="False" Margin="16" Height="50" Width="50"
-                              x:Name="MenuToggleButton" HorizontalAlignment="Right"
-                              VerticalAlignment="Bottom">
-                    <ToggleButton.Content>
-                        <materialDesign:PackIcon Kind="Plus" />
-                    </ToggleButton.Content>
-                    <materialDesign:ToggleButtonAssist.OnContent>
-                        <materialDesign:PackIcon Kind="ArrowLeft" />
-                    </materialDesign:ToggleButtonAssist.OnContent>
-                </ToggleButton>
+                <Button Grid.Row="1" Margin="16" Height="50" Width="50" HorizontalAlignment="Right" 
+                        Style="{DynamicResource MaterialDesignFloatingActionButton}"
+                              VerticalAlignment="Bottom" Command="{Binding RaidListCommand}">
+                        <materialDesign:PackIcon Kind="Plus" Width="45" Height="45"/>
+                </Button>
                 <tb:TaskbarIcon Grid.Row="0" x:Name="TaskbarNotifyIcon" IconSource="Assets/testicon.ico" />
             </Grid>
-        </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
 </controls:MetroWindow>

@@ -145,11 +145,15 @@
     <Compile Include="Twitter\TweetProcessor.cs" />
     <Compile Include="ViewModels\ActionCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\RaidListViewModel.cs" />
     <Compile Include="Views\BossView.xaml.cs">
       <DependentUpon>BossView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RaidBossesDialog.xaml.cs">
+      <DependentUpon>RaidBossesDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TweetBaloon.xaml.cs">
       <DependentUpon>TweetBaloon.xaml</DependentUpon>
@@ -171,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LoginDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RaidBossesDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

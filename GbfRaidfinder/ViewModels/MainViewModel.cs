@@ -12,6 +12,8 @@ using GbfRaidfinder.Factorys;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Models;
 using GbfRaidfinder.Twitter;
+using GbfRaidfinder.Views;
+using MaterialDesignThemes.Wpf;
 using PropertyChanged;
 using Tweetinvi.Events;
 using Tweetinvi.Models;
@@ -30,6 +32,8 @@ namespace GbfRaidfinder.ViewModels {
         private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
             "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
 
+        private readonly ControllerFactory _controllerFactory;
+
         public MainViewModel(ITweetProcessor tweetProcessor, ControllerFactory controllerFactory) {
             _tweetProcessor = tweetProcessor;
             _raidsController = controllerFactory.GetRaidsController;
@@ -37,21 +41,24 @@ namespace GbfRaidfinder.ViewModels {
             _tweetObserver = controllerFactory.GetTweetObserver;
             _settingsController = controllerFactory.GetSettingsController;
             _blacklistController = controllerFactory.GetBlacklistController;
+            _controllerFactory = controllerFactory;
             Follows = _raidsController.Follows;
             RaidBosses =
                 new ReadOnlyObservableCollection<RaidListItem>(controllerFactory.GetRaidlistController.RaidBossListItems);
             Settings = _settingsController.Settings;
-            AddCommand = new ActionCommand(r => Add((RaidListItem) r));
             RemoveCommand = new ActionCommand(r => Remove((string) r));
             StartLoginCommand = new ActionCommand(() => _loginController.StartNewLogin());
             MoveLeftCommand = new ActionCommand(f => MoveLeft((FollowModel) f));
             MoveRightCommand = new ActionCommand(f => MoveRight((FollowModel) f));
+            RaidListCommand = new ActionCommand(ShowRaids);
 
             _tweetObserver.Stream.MatchingTweetReceived += StreamOnMatchingTweetReceived;
             _tweetObserver.Stream.NonMatchingTweetReceived += StreamOnNonMatchingTweetReceived;
             _tweetObserver.Stream.StreamStopped += StreamOnStreamStopped;
             _tweetObserver.Stream.DisconnectMessageReceived += StreamOnDisconnectMessageReceived;
+#if !DEBUG
             Startup();
+#endif
         }
 
         public SettingsModel Settings { get; set; }
@@ -60,12 +67,11 @@ namespace GbfRaidfinder.ViewModels {
         public ReadOnlyObservableCollection<RaidListItem> RaidBosses { get; }
 
         public ICommand StartLoginCommand { get; }
-
-        public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
         public ICommand BlacklistCommand { get; }
+        public ICommand RaidListCommand { get; }
 
         private void Startup() {
             if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) &&
@@ -165,22 +171,11 @@ namespace GbfRaidfinder.ViewModels {
                 Console.WriteLine(e);
             }
         }
-
-        private void Add(RaidListItem raidBoss) {
-            try {
-                if (_raidsController.Follows.Select(f => f.English).ToList().Contains(raidBoss.English)) {
-                    return;
-                }
-                _raidsController.Follows.Add(new FollowModel(raidBoss.Japanese, raidBoss.English, raidBoss.Image, _blacklistController));
-                _raidsController.Save();
-            }
-            catch (Exception e) {
-                Console.WriteLine(e);
-            }
-        }
-
+        
         private void Remove(string name) {
             _raidsController.Follows.RemoveAll(f => f.Japanese == name || f.English == name);
+            _controllerFactory.GetRaidlistController.RaidBossListItems.First(
+                f => f.Japanese == name || f.English == name).Following = false;
             _raidsController.Save();
         }
 
@@ -216,6 +211,14 @@ namespace GbfRaidfinder.ViewModels {
             _raidsController.Follows.RemoveAt(index);
             _raidsController.Follows.Insert(index + 1, followModel);
             _raidsController.Save();
+        }
+
+        private readonly RaidBossesDialog _raidBossesDialog = new RaidBossesDialog();
+        private async void ShowRaids() {
+            if (_raidBossesDialog.DataContext == null) {
+                _raidBossesDialog.DataContext = new RaidListViewModel(_controllerFactory);
+            }
+            await DialogHost.Show(_raidBossesDialog);
         }
     }
 }
