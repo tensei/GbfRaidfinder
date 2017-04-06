@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GbfRaidfinder.ViewModels;
 
 namespace GbfRaidfinder.Views {
     /// <summary>
-    /// Interaction logic for RaidBossesDialog.xaml
+    /// Interaction logic for RaidBossesView.xaml
     /// </summary>
-    public partial class RaidBossesDialog : UserControl {
-        public RaidBossesDialog() {
+    public partial class RaidBossesView : UserControl {
+        public RaidBossesView() {
             InitializeComponent();
         }
     }

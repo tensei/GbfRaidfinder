@@ -43,6 +43,7 @@ namespace GbfRaidfinder.ViewModels {
             _blacklistController = controllerFactory.GetBlacklistController;
             _controllerFactory = controllerFactory;
             Follows = _raidsController.Follows;
+            RaidListCtx = new RaidListViewModel(controllerFactory);
             RaidBosses =
                 new ReadOnlyObservableCollection<RaidListItem>(controllerFactory.GetRaidlistController.RaidBossListItems);
             Settings = _settingsController.Settings;
@@ -50,7 +51,6 @@ namespace GbfRaidfinder.ViewModels {
             StartLoginCommand = new ActionCommand(() => _loginController.StartNewLogin());
             MoveLeftCommand = new ActionCommand(f => MoveLeft((FollowModel) f));
             MoveRightCommand = new ActionCommand(f => MoveRight((FollowModel) f));
-            RaidListCommand = new ActionCommand(ShowRaids);
 
             _tweetObserver.Stream.MatchingTweetReceived += StreamOnMatchingTweetReceived;
             _tweetObserver.Stream.NonMatchingTweetReceived += StreamOnNonMatchingTweetReceived;
@@ -70,8 +70,8 @@ namespace GbfRaidfinder.ViewModels {
         public ICommand RemoveCommand { get; }
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
-        public ICommand BlacklistCommand { get; }
-        public ICommand RaidListCommand { get; }
+
+        public RaidListViewModel RaidListCtx { get; set; }
 
         private void Startup() {
             if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) &&
@@ -141,7 +141,7 @@ namespace GbfRaidfinder.ViewModels {
                     //if (!string.IsNullOrWhiteSpace(tweet.Text) && follow != null) {
                     //    tweet.Text = await TranslateMessage(tweet.Text);
                     //}
-                    if (_blacklistController.Blacklist.Users.Contains(tweet.User)) {
+                    if (_blacklistController.Blacklist.Contains(tweet.User)) {
                         return;
                     }
                     follow?.TweetInfos.Insert(0, tweet);
@@ -211,14 +211,6 @@ namespace GbfRaidfinder.ViewModels {
             _raidsController.Follows.RemoveAt(index);
             _raidsController.Follows.Insert(index + 1, followModel);
             _raidsController.Save();
-        }
-
-        private readonly RaidBossesDialog _raidBossesDialog = new RaidBossesDialog();
-        private async void ShowRaids() {
-            if (_raidBossesDialog.DataContext == null) {
-                _raidBossesDialog.DataContext = new RaidListViewModel(_controllerFactory);
-            }
-            await DialogHost.Show(_raidBossesDialog);
         }
     }
 }

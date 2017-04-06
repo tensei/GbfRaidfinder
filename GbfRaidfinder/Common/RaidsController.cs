@@ -10,7 +10,10 @@ namespace GbfRaidfinder.Common {
     public class RaidsController : IRaidsController {
         private readonly string _configFile = Path.Combine(Directory.GetCurrentDirectory(), "Raids.json");
         public ObservableCollection<FollowModel> Follows { get; set; }
-
+        private readonly IBlacklistController _blacklistController;
+        public RaidsController(IBlacklistController blacklistController) {
+            _blacklistController = blacklistController;
+        }
         public void Load() {
             if (File.Exists(_configFile)) {
                 var input = File.ReadAllText(_configFile);
@@ -21,6 +24,9 @@ namespace GbfRaidfinder.Common {
                     NullValueHandling = NullValueHandling.Ignore
                 };
                 Follows = JsonConvert.DeserializeObject<ObservableCollection<FollowModel>>(input, jsonSettings);
+                foreach (var followModel in Follows) {
+                    followModel.BlacklistController = _blacklistController;
+                }
             }
             else {
                 Follows = new ObservableCollection<FollowModel>();

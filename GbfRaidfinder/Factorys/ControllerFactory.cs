@@ -13,8 +13,8 @@ namespace GbfRaidfinder.Factorys {
 
             GetSettingsController.Load();
             GetRaidsController.Load();
-            GetRaidlistController.Load();
             GetBlacklistController.Load();
+            GetRaidlistController.Load();
         }
 
         public ISettingsController GetSettingsController { get; }

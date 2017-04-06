@@ -17,7 +17,7 @@ namespace GbfRaidfinder.Models {
     public class FollowModel {
         [JsonIgnore] public readonly ObservableCollection<TweetInfo> TweetInfos = new ObservableCollection<TweetInfo>();
         [JsonIgnore]
-        private readonly IBlacklistController _blacklistController;
+        public IBlacklistController BlacklistController { get; set; }
         public FollowModel(string jp, string en, string image, IBlacklistController blacklistController) {
             English = en;
             Japanese = jp;
@@ -25,7 +25,9 @@ namespace GbfRaidfinder.Models {
             CopyCommand = new ActionCommand(c => Copy((TweetInfo) c));
             BlacklistCommand = new ActionCommand(s => Blacklist((string) s));
             Tweets = new ReadOnlyObservableCollection<TweetInfo>(TweetInfos);
-            _blacklistController = blacklistController;
+            if (blacklistController != null) {
+                BlacklistController = blacklistController;
+            }
         }
 
         public string English { get; set; }
@@ -52,10 +54,10 @@ namespace GbfRaidfinder.Models {
         public ICommand BlacklistCommand { get; }
 
         private void Blacklist(string user) {
-            if (_blacklistController.Blacklist.Users.Contains(user)) {
+            if (BlacklistController.Blacklist.Contains(user)) {
                 return;
             }
-            _blacklistController.Blacklist.Users.Add(user);
+            BlacklistController.Blacklist.Add(user);
             TweetInfos.RemoveAll(u => u.User == user);
         }
 

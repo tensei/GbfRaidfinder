@@ -21,7 +21,7 @@ namespace GbfRaidfinder {
             container.RegisterType<Raids>();
             container.RegisterInstance<ISettingsController>(new SettingsController());
             container.RegisterInstance<IBlacklistController>(new BlacklistController());
-            container.RegisterInstance<IRaidsController>(new RaidsController());
+            container.RegisterInstance<IRaidsController>(new RaidsController(container.Resolve<IBlacklistController>()));
             container.RegisterInstance<IRaidlistController>(new RaidListController());
             container.RegisterInstance<ITweetProcessor>(new TweetProcessor());
             container.RegisterType<ILoginController, LoginController>();

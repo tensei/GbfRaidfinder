@@ -35,57 +35,53 @@
             </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <ToggleButton IsChecked="{Binding SelectedIndex, ElementName=Transitioner}">
+                Raids
+            </ToggleButton>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
     <materialDesign:DialogHost>
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding IsChecked, ElementName=toggleButton}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <materialDesign:ColorZone Mode="Dark" Padding="4" Margin="0,0,0,4" materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Raids" FontSize="24" Grid.Column="0" VerticalAlignment="Center"/>
+                            <ToggleButton Grid.Column="2" HorizontalAlignment="Right"
+                                          Style="{DynamicResource MaterialDesignHamburgerToggleButton}" 
+                                          IsChecked="{Binding IsChecked, ElementName=toggleButton, Mode=TwoWay}">
+                            </ToggleButton>
+                        </Grid>
+                    </materialDesign:ColorZone>
+                    <views:RaidBossesView Grid.Row="1" Width="300" DataContext="{Binding RaidListCtx}"/>
+                </Grid>
+            </materialDesign:DrawerHost.LeftDrawerContent>
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <materialDesign:ColorZone Grid.Row="0" Padding="6">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock>Global Copy</TextBlock>
-                            <ToggleButton Margin="5,0" IsChecked="{Binding Settings.GlobalCopy}"
-                                          ToolTip="Enable/Disable Auto Copy globally" />
-                            <TextBlock>Global Sound</TextBlock>
-                            <ToggleButton Margin="5,0" IsChecked="{Binding Settings.GlobalSound}"
-                                          ToolTip="Enable/Disable Sound globally" />
-                        </StackPanel>
-                        <TextBlock Grid.Column="2">Raid height</TextBlock>
-                        <Slider Grid.Column="3" Margin="5,0" x:Name="slider"
-                                Maximum="1000" Minimum="100"
-                                Value="400" />
-                    </Grid>
-                </materialDesign:ColorZone>
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" >
-                    <ItemsControl ItemsSource="{Binding Follows}" VerticalAlignment="Stretch"
-                                      dd:DragDrop.IsDragSource="True"
-                                      dd:DragDrop.IsDropTarget="True">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel HorizontalAlignment="Stretch" IsItemsHost="True" Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <views:BossView x:Name="Bossview" BorderThickness="0,0,1,1"
-                                                BorderBrush="Black" Height="{Binding Value, ElementName=slider}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-                <Button Grid.Row="1" Margin="16" Height="50" Width="50" HorizontalAlignment="Right" 
-                        Style="{DynamicResource MaterialDesignFloatingActionButton}"
-                              VerticalAlignment="Bottom" Command="{Binding RaidListCommand}">
-                        <materialDesign:PackIcon Kind="Plus" Width="45" Height="45"/>
-                </Button>
-                <tb:TaskbarIcon Grid.Row="0" x:Name="TaskbarNotifyIcon" IconSource="Assets/testicon.ico" />
+                <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="0">
+                    <views:MainView/>
+                    <!--<views:RaidBossesView DataContext="{Binding RaidListCtx}"/>-->
+                </materialDesign:Transitioner>
+                <ToggleButton x:Name="toggleButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="16" 
+                              Style="{DynamicResource MaterialDesignActionToggleButton}"/>
+                <tb:TaskbarIcon IconSource="Assets/testicon.ico" >
+                    <tb:TaskbarIcon.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Exit"/>
+                        </ContextMenu>
+                    </tb:TaskbarIcon.ContextMenu>
+                </tb:TaskbarIcon>
             </Grid>
+        </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
 </controls:MetroWindow>

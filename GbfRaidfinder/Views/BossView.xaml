@@ -56,22 +56,22 @@
                             Command="{Binding DataContext.MoveLeftCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
                             CommandParameter="{Binding}"
                             Style="{DynamicResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="ArrowLeft" />
+                            <materialDesign:PackIcon Kind="ArrowLeft" Foreground="{DynamicResource AccentColorBrush}" />
                         </Button>
                         <Button
                             Command="{Binding DataContext.MoveRightCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
                             CommandParameter="{Binding}"
                             Style="{DynamicResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="ArrowRight" />
+                            <materialDesign:PackIcon Kind="ArrowRight" Foreground="{DynamicResource AccentColorBrush}" />
                         </Button>
                         <Button Command="{x:Static materialDesign:Transitioner.MoveLastCommand}"
                                 Style="{DynamicResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="Settings" />
+                            <materialDesign:PackIcon Kind="Settings" Foreground="{DynamicResource AccentColorBrush}" />
                         </Button>
                         <Button Style="{DynamicResource MaterialDesignToolButton}"
                                 Command="{Binding DataContext.RemoveCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
                                 CommandParameter="{Binding Japanese}">
-                            <materialDesign:PackIcon Kind="Close" />
+                            <materialDesign:PackIcon Kind="Close" Foreground="{DynamicResource AccentColorBrush}" />
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -84,17 +84,18 @@
                                 <StackPanel>
                                     <Button Background="Transparent" BorderThickness="0" Padding="4" Height="Auto"
                                             MinHeight="30"
+                                            Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:BossView}}}"
                                             HorizontalContentAlignment="Stretch" Margin="2,4,2,2"
                                             VerticalContentAlignment="Center"
                                             Command="{Binding DataContext.CopyCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
                                             CommandParameter="{Binding}">
-                                        <!--<Button.ContextMenu>
-                                            <ContextMenu DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource=Self}">
+                                        <Button.ContextMenu>
+                                            <ContextMenu>
                                                 <MenuItem Header="Blacklist User"
-                                                          Command="{Binding DataContext.BlacklistCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
+                                                          Command="{Binding PlacementTarget.Tag.BlacklistCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
                                                           CommandParameter="{Binding User}"/>
                                             </ContextMenu>
-                                        </Button.ContextMenu>-->
+                                        </Button.ContextMenu>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />

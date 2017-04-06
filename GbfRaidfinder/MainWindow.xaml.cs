@@ -15,19 +15,18 @@ namespace GbfRaidfinder {
             _controllerFactory = controllerFactory;
             InitializeComponent();
             DataContext = new MainViewModel(tweetProcessor, controllerFactory);
-            slider.Value = Settings.Default.BossViewHeight;
         }
 
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e) {
             Settings.Default.Height = Height;
             Settings.Default.Width = Width;
-            Settings.Default.BossViewHeight = slider.Value;
+            //Settings.Default.BossViewHeight = slider.Value;
             Settings.Default.Save();
             _controllerFactory.GetSettingsController.Save();
             _controllerFactory.GetRaidlistController.Save();
-            _controllerFactory.GetRaidsController.Save();
             _controllerFactory.GetBlacklistController.Save();
+            _controllerFactory.GetRaidsController.Save();
         }
     }
 }

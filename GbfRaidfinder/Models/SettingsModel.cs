@@ -13,5 +13,8 @@ namespace GbfRaidfinder.Models {
 
         [DefaultValue(true), JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool GlobalSound { get; set; } = true;
+        [DefaultValue(300), JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public double BossFollowHeight { get; set; } = 200;
+        
     }
 }

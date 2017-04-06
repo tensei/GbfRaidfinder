@@ -13,7 +13,7 @@ using Newtonsoft.Json.Converters;
 namespace GbfRaidfinder.Common {
     public class BlacklistController : IBlacklistController {
         private readonly string _configFile = Path.Combine(Directory.GetCurrentDirectory(), "Blacklist.json");
-        public BlacklistModel Blacklist { get; set; }
+        public ObservableCollection<string> Blacklist { get; set; }
 
         public void Load() {
             if (File.Exists(_configFile)) {
@@ -24,9 +24,9 @@ namespace GbfRaidfinder.Common {
                     DefaultValueHandling = DefaultValueHandling.Populate,
                     NullValueHandling = NullValueHandling.Ignore
                 };
-                Blacklist = JsonConvert.DeserializeObject<BlacklistModel>(input, jsonSettings);
+                Blacklist = JsonConvert.DeserializeObject<ObservableCollection<string>>(input, jsonSettings);
             } else {
-                Blacklist = new BlacklistModel{Users = new List<string>()};
+                Blacklist = new ObservableCollection<string>();
             }
             Save();
         }

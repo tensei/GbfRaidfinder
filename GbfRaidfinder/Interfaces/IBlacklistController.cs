@@ -1,8 +1,9 @@
+using System.Collections.ObjectModel;
 using GbfRaidfinder.Models;
 
 namespace GbfRaidfinder.Interfaces {
     public interface IBlacklistController {
-        BlacklistModel Blacklist { get; set; }
+        ObservableCollection<string> Blacklist { get; set; }
         void Load();
         void Save();
     }
