@@ -20,7 +20,9 @@ namespace GbfRaidfinder.Twitter {
                     User = tweet.CreatedBy.Name,
                     Boss = tweetreg.Groups[2].Value,
                     Language = "JP",
-                    Text = tweetreg.Groups[1].Value.Trim()
+                    Text = tweetreg.Groups[1].Value.Trim(),
+                    Avatar = tweet.CreatedBy.ProfileImageUrlHttps,
+                    Profile = tweet.Url
                 };
             }
             tweetreg = Regex.Match(tweet.Text, RaidRegexEnglish);
@@ -34,7 +36,9 @@ namespace GbfRaidfinder.Twitter {
                 User = tweet.CreatedBy.Name,
                 Boss = tweetreg.Groups[2].Value,
                 Language = "EN",
-                Text = tweetreg.Groups[1].Value.Trim()
+                Text = tweetreg.Groups[1].Value.Trim(),
+                Avatar = tweet.CreatedBy.ProfileImageUrlHttps,
+                Profile = tweet.Url
             };
             //Clipboard.SetText(id);
         }

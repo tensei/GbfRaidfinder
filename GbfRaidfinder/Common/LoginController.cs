@@ -8,7 +8,6 @@ using Tweetinvi.Models;
 
 namespace GbfRaidfinder.Common {
     public class LoginController : ILoginController {
-        private readonly bool _running;
         private readonly ISettingsController _settingsController;
 
         private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",

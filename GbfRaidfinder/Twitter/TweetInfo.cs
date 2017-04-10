@@ -12,5 +12,7 @@ namespace GbfRaidfinder.Twitter {
         public string Id { get; set; }
         public string Language { get; set; }
         public bool Clicked { get; set; }
+        public string Avatar { get; set; }
+        public string Profile { get; set; }
     }
 }

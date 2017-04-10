@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace GbfRaidfinder.Models {
             Image = image;
             CopyCommand = new ActionCommand(c => Copy((TweetInfo) c));
             BlacklistCommand = new ActionCommand(s => Blacklist((string) s));
+            CopyUrlCommand = new ActionCommand(a => CopyUrl((string) a));
             Tweets = new ReadOnlyObservableCollection<TweetInfo>(TweetInfos);
             if (blacklistController != null) {
                 BlacklistController = blacklistController;
@@ -52,6 +54,8 @@ namespace GbfRaidfinder.Models {
 
         [JsonIgnore]
         public ICommand BlacklistCommand { get; }
+        [JsonIgnore]
+        public ICommand CopyUrlCommand { get; }
 
         private void Blacklist(string user) {
             if (BlacklistController.Blacklist.Contains(user)) {
@@ -59,6 +63,14 @@ namespace GbfRaidfinder.Models {
             }
             BlacklistController.Blacklist.Add(user);
             TweetInfos.RemoveAll(u => u.User == user);
+        }
+        private void CopyUrl(string url) {
+            try {
+                Clipboard.SetText(url);
+            }
+            catch (Exception) {
+                //ignore
+            }
         }
 
         private void Copy(ITweetInfo tweetInfo) {

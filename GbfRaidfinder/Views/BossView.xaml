@@ -91,6 +91,15 @@
                                             CommandParameter="{Binding}">
                                         <Button.ContextMenu>
                                             <ContextMenu>
+                                                <MenuItem Header="Copy Tweet link"
+                                                          Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                          CommandParameter="{Binding Profile}"/>
+                                                <MenuItem Header="Copy Avatar link"
+                                                          Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                          CommandParameter="{Binding Avatar}"/>
+                                                <MenuItem Header="Copy Text"
+                                                          Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                          CommandParameter="{Binding Text}"/>
                                                 <MenuItem Header="Blacklist User"
                                                           Command="{Binding PlacementTarget.Tag.BlacklistCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
                                                           CommandParameter="{Binding User}"/>
@@ -98,6 +107,7 @@
                                         </Button.ContextMenu>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20" />
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
@@ -106,14 +116,15 @@
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <TextBlock Grid.Column="0" Text="{Binding User}" VerticalAlignment="Center"
+                                            <Image Source="{Binding Avatar}" MaxHeight="20" Margin="0,0,5,0"/>
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding User}" VerticalAlignment="Center"
                                                        HorizontalAlignment="Left" TextWrapping="Wrap" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Time}"
+                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Time}"
                                                        VerticalAlignment="Center"
                                                        HorizontalAlignment="Right" Margin="10,0" />
-                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Id}"
+                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Id}"
                                                        VerticalAlignment="Center" FontWeight="Bold" />
-                                            <materialDesign:Card Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                            <materialDesign:Card Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
                                                                  Padding="4" Margin="4,4,4,0"
                                                                  Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
                                                                  materialDesign:ShadowAssist.ShadowDepth="Depth2">

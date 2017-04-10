@@ -6,8 +6,6 @@
              xmlns:local="clr-namespace:GbfRaidfinder.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dd="urn:gong-wpf-dragdrop"
-             xmlns:tb="http://www.hardcodet.net/taskbar"
-             xmlns:properties="clr-namespace:GbfRaidfinder.Properties"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -24,14 +22,6 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock>Global Copy</TextBlock>
-                    <ToggleButton Margin="5,0" IsChecked="{Binding Settings.GlobalCopy}"
-                                          ToolTip="Enable/Disable Auto Copy globally" />
-                    <TextBlock>Global Sound</TextBlock>
-                    <ToggleButton Margin="5,0" IsChecked="{Binding Settings.GlobalSound}"
-                                          ToolTip="Enable/Disable Sound globally" />
-                </StackPanel>
                 <TextBlock Grid.Column="2">Raid height</TextBlock>
                 <Slider Grid.Column="3" Margin="5,0"
                                 Maximum="1000" Minimum="200" x:Name="slider"
@@ -55,10 +45,5 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <!--<ToggleButton Grid.Row="1" Margin="16" Height="50" Width="50" HorizontalAlignment="Right" 
-                        Style="{DynamicResource MaterialDesignFloatingActionButton}"
-                              VerticalAlignment="Bottom" Command="{Binding RaidListCommand}">
-            <materialDesign:PackIcon Kind="Plus" Width="45" Height="45"/>
-        </ToggleButton>-->
     </Grid>
 </UserControl>

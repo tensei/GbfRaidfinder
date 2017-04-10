@@ -37,9 +37,6 @@
     </controls:MetroWindow.LeftWindowCommands>
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <ToggleButton IsChecked="{Binding SelectedIndex, ElementName=Transitioner}">
-                Raids
-            </ToggleButton>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
     <materialDesign:DialogHost>
@@ -68,16 +65,48 @@
                 </Grid>
             </materialDesign:DrawerHost.LeftDrawerContent>
             <Grid>
-                <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="0">
-                    <views:MainView/>
-                    <!--<views:RaidBossesView DataContext="{Binding RaidListCtx}"/>-->
-                </materialDesign:Transitioner>
-                <ToggleButton x:Name="toggleButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="16" 
-                              Style="{DynamicResource MaterialDesignActionToggleButton}"/>
-                <tb:TaskbarIcon IconSource="Assets/testicon.ico" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <views:MainView Grid.Column="1"/>
+                <materialDesign:ColorZone Grid.Column="0" Mode="Dark" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                    <StackPanel Orientation="Vertical">
+                        <ToggleButton x:Name="toggleButton" 
+                                      Style="{DynamicResource MaterialDesignHamburgerToggleButton}" BorderThickness="1"/>
+                        <ToggleButton Height="50" Width="50" HorizontalAlignment="Right" 
+                                      Style="{DynamicResource MaterialDesignActionToggleButton}"
+                                      VerticalAlignment="Bottom" Background="Transparent"
+                                      IsChecked="{Binding Settings.GlobalSound}"
+                                      Checked="ToggleButton_Click"
+                                      Unchecked="ToggleButton_Click"
+                                      >
+                            <ToggleButton.Content>
+                                <materialDesign:PackIcon Kind="BellOutline" Width="30" Height="30"/>
+                            </ToggleButton.Content>
+                            <materialDesign:ToggleButtonAssist.OnContent>
+                                <materialDesign:PackIcon Kind="BellRing" Width="30" Height="30"/>
+                            </materialDesign:ToggleButtonAssist.OnContent>
+                        </ToggleButton>
+                        <ToggleButton Height="50" Width="50" HorizontalAlignment="Right" 
+                                      Style="{DynamicResource MaterialDesignActionToggleButton}"
+                                      VerticalAlignment="Bottom" Background="Transparent"
+                                      IsChecked="{Binding Settings.GlobalCopy}"
+                                      Checked="ToggleButton2_Click"
+                                      Unchecked="ToggleButton2_Click">
+                            <ToggleButton.Content>
+                                <materialDesign:PackIcon Kind="ClipboardOutline" Width="30" Height="30"/>
+                            </ToggleButton.Content>
+                            <materialDesign:ToggleButtonAssist.OnContent>
+                                <materialDesign:PackIcon Kind="Clipboard" Width="30" Height="30"/>
+                            </materialDesign:ToggleButtonAssist.OnContent>
+                        </ToggleButton>
+                    </StackPanel>
+                </materialDesign:ColorZone>
+                <tb:TaskbarIcon Grid.Column="1" IconSource="Assets/testicon.ico" >
                     <tb:TaskbarIcon.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Exit"/>
+                            <MenuItem Header="Exit" Click="MenuItem_OnClick"/>
                         </ContextMenu>
                     </tb:TaskbarIcon.ContextMenu>
                 </tb:TaskbarIcon>
