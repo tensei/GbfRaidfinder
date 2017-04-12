@@ -91,6 +91,9 @@
                                             CommandParameter="{Binding}">
                                         <Button.ContextMenu>
                                             <ContextMenu>
+                                                <MenuItem Header="Translate"
+                                                          Command="{Binding PlacementTarget.Tag.TranslateCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                          CommandParameter="{Binding}"/>
                                                 <MenuItem Header="Copy Tweet link"
                                                           Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
                                                           CommandParameter="{Binding Profile}"/>

@@ -50,6 +50,7 @@
     <Compile Include="RaidBoss.cs" />
     <Compile Include="RaidListItem.cs" />
     <Compile Include="Raids.cs" />
+    <Compile Include="TranslationResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />

@@ -69,14 +69,23 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <views:MainView Grid.Column="1"/>
+                <materialDesign:Transitioner Grid.Column="1" SelectedIndex="{Binding IsChecked, ElementName=toggleButton1}">
+                    <views:MainView />
+                    <views:InfoView />
+                </materialDesign:Transitioner>
                 <materialDesign:ColorZone Grid.Column="0" Mode="Dark" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth2">
-                    <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         <ToggleButton x:Name="toggleButton" 
                                       Style="{DynamicResource MaterialDesignHamburgerToggleButton}" BorderThickness="1"/>
-                        <ToggleButton Height="50" Width="50" HorizontalAlignment="Right" 
+                        <ToggleButton Grid.Row="1" Height="50" Width="50"
                                       Style="{DynamicResource MaterialDesignActionToggleButton}"
-                                      VerticalAlignment="Bottom" Background="Transparent"
+                                      Background="Transparent"
                                       IsChecked="{Binding Settings.GlobalSound}"
                                       Checked="ToggleButton_Click"
                                       Unchecked="ToggleButton_Click"
@@ -88,9 +97,9 @@
                                 <materialDesign:PackIcon Kind="BellRing" Width="30" Height="30"/>
                             </materialDesign:ToggleButtonAssist.OnContent>
                         </ToggleButton>
-                        <ToggleButton Height="50" Width="50" HorizontalAlignment="Right" 
+                        <ToggleButton Grid.Row="2" Height="50" Width="50"
                                       Style="{DynamicResource MaterialDesignActionToggleButton}"
-                                      VerticalAlignment="Bottom" Background="Transparent"
+                                      Background="Transparent"
                                       IsChecked="{Binding Settings.GlobalCopy}"
                                       Checked="ToggleButton2_Click"
                                       Unchecked="ToggleButton2_Click">
@@ -101,7 +110,17 @@
                                 <materialDesign:PackIcon Kind="Clipboard" Width="30" Height="30"/>
                             </materialDesign:ToggleButtonAssist.OnContent>
                         </ToggleButton>
-                    </StackPanel>
+                        <ToggleButton x:Name="toggleButton1" Grid.Row="3" Height="50" Width="50" 
+                                      Style="{DynamicResource MaterialDesignActionToggleButton}"
+                                      VerticalAlignment="Bottom" Background="Transparent">
+                            <ToggleButton.Content>
+                                <materialDesign:PackIcon Kind="InformationOutline" Width="30" Height="30"/>
+                            </ToggleButton.Content>
+                            <materialDesign:ToggleButtonAssist.OnContent>
+                                <materialDesign:PackIcon Kind="Information" Width="30" Height="30"/>
+                            </materialDesign:ToggleButtonAssist.OnContent>
+                        </ToggleButton>
+                    </Grid>
                 </materialDesign:ColorZone>
                 <tb:TaskbarIcon Grid.Column="1" IconSource="Assets/testicon.ico" >
                     <tb:TaskbarIcon.ContextMenu>

@@ -7,5 +7,6 @@
         string Language { get; set; }
         bool Clicked { get; set; }
         string Avatar { get; set; }
+        string Text { get; set; }
     }
 }

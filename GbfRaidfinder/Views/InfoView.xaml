@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="GbfRaidfinder.Views.InfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GbfRaidfinder.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" FontSize="18"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Information" FontSize="24"/>
+        <Separator Grid.Row="1"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="2">
+            <TextBlock Text="Github:"/>
+            <TextBlock Margin="5,0">
+                <Hyperlink NavigateUri="https://github.com/tensei/GbfRaidfinder">
+                    <TextBlock Text="https://github.com/tensei/GbfRaidfinder"/>
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="2">
+            <TextBlock Text="PayPal:"/>
+            <TextBlock Margin="5,0">
+                <Hyperlink NavigateUri="https://twitch.streamlabs.com/overrustlelogs#/">
+                    <TextBlock Text="Donate here! :)"/>
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="2">
+            <TextBlock Text="Discord: Tensei#9670"/>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="2">
+            <TextBlock Text="E-mail: " VerticalAlignment="Center"/>
+            <TextBox Text="tensei@overrustlelogs.net" IsReadOnly="True" Width="Auto"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

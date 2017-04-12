@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using GbfRaidfinder.Common;
+using GbfRaidfinder.Data;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Twitter;
 using GbfRaidfinder.ViewModels;
@@ -26,6 +28,7 @@ namespace GbfRaidfinder.Models {
             CopyCommand = new ActionCommand(c => Copy((TweetInfo) c));
             BlacklistCommand = new ActionCommand(s => Blacklist((string) s));
             CopyUrlCommand = new ActionCommand(a => CopyUrl((string) a));
+            TranslateCommand = new ActionCommand(async a => await TranslateMessage((TweetInfo)a));
             Tweets = new ReadOnlyObservableCollection<TweetInfo>(TweetInfos);
             if (blacklistController != null) {
                 BlacklistController = blacklistController;
@@ -56,6 +59,8 @@ namespace GbfRaidfinder.Models {
         public ICommand BlacklistCommand { get; }
         [JsonIgnore]
         public ICommand CopyUrlCommand { get; }
+        [JsonIgnore]
+        public ICommand TranslateCommand { get; }
 
         private void Blacklist(string user) {
             if (BlacklistController.Blacklist.Contains(user)) {
@@ -78,6 +83,32 @@ namespace GbfRaidfinder.Models {
             tweetInfo.Clicked = !tweetInfo.Clicked;
         }
 
+        private readonly WebClient _webClient = new WebClient();
+        private async Task TranslateMessage(ITweetInfo tweet) {
+            if (string.IsNullOrWhiteSpace(tweet.Text)) {
+                return;
+            }
+
+            const string target = "en";
+            const string source = "ja";
+            const string key = "";
+            var link = $"https://translation.googleapis.com/language/translate/v2?key={key}&source={source}&target={target}&q={tweet.Text}";
+
+            try {
+                var response = await _webClient.DownloadStringTaskAsync(new Uri(link));
+
+                var jsonSettings = new JsonSerializerSettings {
+                    ObjectCreationHandling = ObjectCreationHandling.Auto,
+                    DefaultValueHandling = DefaultValueHandling.Populate,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+                var resp = JsonConvert.DeserializeObject<TranslationResponse>(response, jsonSettings);
+                tweet.Text = resp.data.translations[0].translatedText;
+                Console.WriteLine(response);
+            } catch (WebException e) {
+                Console.WriteLine(e.Status);
+            }
+        }
 
         private List<SoundFileModel> GetSoundFiles() {
             var assets = Path.Combine(Directory.GetCurrentDirectory(), "assets");

@@ -148,6 +148,9 @@
     <Compile Include="Views\BossView.xaml.cs">
       <DependentUpon>BossView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\InfoView.xaml.cs">
+      <DependentUpon>InfoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\BossView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

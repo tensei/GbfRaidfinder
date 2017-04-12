@@ -116,22 +116,6 @@ namespace GbfRaidfinder.ViewModels {
             AddTweet(tweet);
         }
 
-        private readonly WebClient _webClient = new WebClient();
-        private async Task<string> TranslateMessage(string msg) {
-            const string target = "en";
-            const string source = "ja";
-            const string key = "AIzaSyD90dAsVVF9iXFK0GIK56BoKEcanDlACMs";
-            var link = $"https://translation.googleapis.com/language/translate/v2?key={key}&source={source}&target={target}&q={msg}";
-            
-            try {
-                var response = await _webClient.DownloadStringTaskAsync(new Uri(link));
-                return response;
-            }
-            catch (WebException e) {
-                Console.WriteLine(e.Status);
-            }
-            return msg;
-        }
         private void AddTweet(TweetInfo tweet) {
             try {
                 Application.Current.Dispatcher.BeginInvoke(new Action(() => {
