@@ -91,7 +91,7 @@ namespace GbfRaidfinder.Models {
 
             const string target = "en";
             const string source = "ja";
-            const string key = "";
+            var key = Credentials.GoogleApiKey;
             var link = $"https://translation.googleapis.com/language/translate/v2?key={key}&source={source}&target={target}&q={tweet.Text}";
 
             try {

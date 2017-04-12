@@ -29,8 +29,8 @@ namespace GbfRaidfinder.ViewModels {
         private readonly ITweetProcessor _tweetProcessor;
         private readonly IBlacklistController _blacklistController;
 
-        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
-            "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
+        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials(Credentials.TwitterConsumerKey,
+            Credentials.TwitterConsumerSecret);
 
         private readonly ControllerFactory _controllerFactory;
 
