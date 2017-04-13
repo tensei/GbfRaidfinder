@@ -23,10 +23,7 @@
                 <TextBlock Text="Click to open Github" FontSize="18" ></TextBlock>
             </Hyperlink>
         </TextBlock>
-        <Button Margin="5,3" Grid.Row="2" Command="materialDesign:DialogHost.CloseDialogCommand" Content="Close">
-            <Button.CommandParameter>
-                <system:Boolean>True</system:Boolean>
-            </Button.CommandParameter>
-        </Button>
+        <Button Margin="5,3" Grid.Row="2" Command="materialDesign:DialogHost.CloseDialogCommand" Content="Close"/>
+        
     </Grid>
 </UserControl>
