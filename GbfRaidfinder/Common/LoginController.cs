@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using GbfRaidfinder.Data;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Views;
 using MaterialDesignThemes.Wpf;
@@ -10,8 +11,8 @@ namespace GbfRaidfinder.Common {
     public class LoginController : ILoginController {
         private readonly ISettingsController _settingsController;
 
-        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials("cYX749T1Fryfp4pjAGa0NxpBt",
-            "A1WxMPmFK7xooaGinBUM6nv4ysvL3nM23Xm83E2nRadqsizAnw");
+        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials(Credentials.TwitterConsumerKey,
+            Credentials.TwitterConsumerSecret);
 
         public LoginController(ISettingsController settingsController) {
             _settingsController = settingsController;

@@ -122,6 +122,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\BlacklistController.cs" />
     <Compile Include="Common\ExceptionHandler.cs" />
+    <Compile Include="Common\UpdateController.cs" />
     <Compile Include="Interfaces\IBlacklistController.cs" />
     <Compile Include="Common\RaidlistController.cs" />
     <Compile Include="Factorys\ControllerFactory.cs" />
@@ -163,6 +164,9 @@
     <Compile Include="Views\TweetBaloon.xaml.cs">
       <DependentUpon>TweetBaloon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UpdateDialog.xaml.cs">
+      <DependentUpon>UpdateDialog.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -196,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TweetBaloon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdateDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,6 +251,9 @@
     <Content Include="Assets\notification.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Assets\version.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

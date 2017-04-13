@@ -59,6 +59,7 @@ namespace GbfRaidfinder.ViewModels {
 #if !DEBUG
             Startup();
 #endif
+            CheckUpdate();
         }
 
         public SettingsModel Settings { get; set; }
@@ -195,6 +196,12 @@ namespace GbfRaidfinder.ViewModels {
             _raidsController.Follows.RemoveAt(index);
             _raidsController.Follows.Insert(index + 1, followModel);
             _raidsController.Save();
+        }
+
+        private async void CheckUpdate() {
+            if (await UpdateController.Check()) {
+                await DialogHost.Show(new UpdateDialog());
+            }
         }
     }
 }

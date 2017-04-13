@@ -26,7 +26,6 @@ namespace GbfRaidfinder.Twitter {
                 };
             }
             tweetreg = Regex.Match(tweet.Text, RaidRegexEnglish);
-
             if (!tweetreg.Success) {
                 return null;
             }
