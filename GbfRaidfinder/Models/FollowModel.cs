@@ -71,7 +71,7 @@ namespace GbfRaidfinder.Models {
         }
         private void CopyUrl(string url) {
             try {
-                Clipboard.SetText(url);
+                Clipboard.SetDataObject(url);
             }
             catch (Exception) {
                 //ignore
@@ -79,7 +79,12 @@ namespace GbfRaidfinder.Models {
         }
 
         private void Copy(ITweetInfo tweetInfo) {
-            Clipboard.SetText(tweetInfo.Id);
+            try {
+                Clipboard.SetDataObject(tweetInfo.Id);
+            }
+            catch (Exception ) {
+                //ignore
+            }
             tweetInfo.Clicked = !tweetInfo.Clicked;
         }
 
