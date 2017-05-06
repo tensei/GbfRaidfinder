@@ -17,13 +17,9 @@
         <materialDesign:ColorZone>
             <TextBlock Text="New Update!" FontSize="24" Margin="5,3"></TextBlock>
         </materialDesign:ColorZone>
-        <TextBlock Grid.Row="1" HorizontalAlignment="Center" Margin="5,3">
-            <Hyperlink NavigateUri="https://github.com/tensei/GbfRaidfinder/releases">
-                <materialDesign:PackIcon Kind="GithubCircle" ></materialDesign:PackIcon>
-                <TextBlock Text="Click to open Github" FontSize="18" ></TextBlock>
-            </Hyperlink>
-        </TextBlock>
+        <Button Grid.Row="1" Content="Click to open Github" HorizontalAlignment="Center" Margin="5,3"
+                Style="{DynamicResource MaterialDesignFlatButton}"
+                Click="ButtonBase_OnClick"/>
         <Button Margin="5,3" Grid.Row="2" Command="materialDesign:DialogHost.CloseDialogCommand" Content="Close"/>
-        
     </Grid>
 </UserControl>

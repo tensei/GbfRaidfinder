@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,16 @@ namespace GbfRaidfinder.Views {
     public partial class UpdateDialog : UserControl {
         public UpdateDialog() {
             InitializeComponent();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
+
+            //https://github.com/tensei/GbfRaidfinder/releases
+            try {
+                Process.Start("https://github.com/tensei/GbfRaidfinder/releases");
+            } catch (Exception exception) {
+                Console.WriteLine(exception);
+            }
         }
     }
 }

@@ -20,9 +20,7 @@ namespace GbfRaidfinder.Common {
                     var filePath = Path.Combine(LogsPath, filename);
                     var error = JsonConvert.SerializeObject(args.ExceptionObject, Formatting.Indented);
                     File.AppendAllText(filePath, error);
-#if DEBUG
                     SendReport(filePath, filename);
-#endif
                 } catch {
                     // ignored
                 }

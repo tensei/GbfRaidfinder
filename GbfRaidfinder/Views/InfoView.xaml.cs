@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,24 @@ namespace GbfRaidfinder.Views {
     public partial class InfoView : UserControl {
         public InfoView() {
             InitializeComponent();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
+            try {
+                Process.Start("https://twitch.streamlabs.com/overrustlelogs#/");
+            }
+            catch (Exception exception) {
+                Console.WriteLine(exception);
+            }
+        }
+
+        private void ButtonBase_OnClick1(object sender, RoutedEventArgs e) {
+            try {
+                Process.Start("https://github.com/tensei/GbfRaidfinder");
+            }
+            catch (Exception exception) {
+                Console.WriteLine(exception);
+            }
         }
     }
 }

@@ -76,7 +76,12 @@ namespace GbfRaidfinder.Common {
 
             for (var i = 0; i < local.Count; i++) {
                 if (!finalenamesEn.Contains(local[i].English.ToLower()) && !finenamesJa.Contains(local[i].Japanese.ToLower())) {
-                    finallist.Insert(i, local[i]);
+                    try {
+                        finallist.Insert(i, local[i]);
+                    }
+                    catch (Exception e) {
+                        finallist.Add(local[i]);
+                    }
                 }
             }
             RaidBossListItems = finallist;

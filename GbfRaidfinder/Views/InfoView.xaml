@@ -22,19 +22,14 @@
         <Separator Grid.Row="1"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="2">
             <TextBlock Text="Github:"/>
-            <TextBlock Margin="5,0">
-                <Hyperlink NavigateUri="https://github.com/tensei/GbfRaidfinder">
-                    <TextBlock Text="https://github.com/tensei/GbfRaidfinder"/>
-                </Hyperlink>
-            </TextBlock>
+            <Button Content="https://github.com/tensei/GbfRaidfinder" Margin="5,0" 
+                    Click="ButtonBase_OnClick1"
+                    Style="{DynamicResource MaterialDesignFlatButton}"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="2">
-            <TextBlock Text="PayPal:"/>
-            <TextBlock Margin="5,0">
-                <Hyperlink NavigateUri="https://twitch.streamlabs.com/overrustlelogs#/">
-                    <TextBlock Text="Donate here! :)"/>
-                </Hyperlink>
-            </TextBlock>
+            <TextBlock Text="PayPal:" VerticalAlignment="Center"/>
+            <Button Content="Donate here! :)" Margin="5,0" Click="ButtonBase_OnClick"
+                    Style="{DynamicResource MaterialDesignFlatButton}"/>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="2">
             <TextBlock Text="Discord: Tensei#9670"/>
