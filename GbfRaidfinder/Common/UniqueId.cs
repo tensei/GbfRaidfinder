@@ -12,19 +12,22 @@ namespace GbfRaidfinder.Common {
 
         public static string Create() {
             var cpuInfo = string.Empty;
-            var mc = new ManagementClass("win32_processor");
-            var moc = mc.GetInstances();
+            try {
+                var mc = new ManagementClass("win32_processor");
+                var moc = mc.GetInstances();
 
-            foreach (var mo in moc) {
-                cpuInfo = mo.Properties["processorID"].Value.ToString();
-                break;
+                foreach (var mo in moc) {
+                    cpuInfo = mo.Properties["processorID"].Value.ToString();
+                    break;
+                }
+                return Sha256(cpuInfo + Environment.MachineName);
             }
-            const string drive = "C";
-            var dsk = new ManagementObject(
-                @"win32_logicaldisk.deviceid=""" + drive + @":""");
-            dsk.Get();
-            var volumeSerial = dsk["VolumeSerialNumber"].ToString();
-            return Sha256(cpuInfo + volumeSerial);
+            catch (Exception) {
+                var name = Environment.MachineName;
+                var hmm = Environment.UserName;
+                return Sha256(name + hmm);
+            }
+
         }
         private static string Sha256(string password) {
             var crypt = new SHA256Managed();

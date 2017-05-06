@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GbfRaidfinder.Common {
     public static class UpdateController {
-        public const float Localver = 0.7f;
+        public const float Localver = 0.71f;
         public static async Task<bool> Check() {
             //https://raw.githubusercontent.com/tensei/GbfRaidfinder/master/GbfRaidfinder/Assets/version.txt
             try {
