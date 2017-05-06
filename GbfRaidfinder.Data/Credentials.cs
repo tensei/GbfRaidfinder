@@ -9,6 +9,6 @@ namespace GbfRaidfinder.Data {
         public static readonly string TwitterConsumerKey = "";
         public static readonly string TwitterConsumerSecret = "";
 
-        public static readonly string GoogleApiKey = "";
+        public static readonly string AppId = "";
     }
 }
