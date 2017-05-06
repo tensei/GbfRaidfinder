@@ -5,10 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GbfRaidfinder.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:gbfRaidfinder="clr-namespace:GbfRaidfinder"
              mc:Ignorable="d" FontSize="18"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Margin="5">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -40,6 +42,11 @@
         <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="2">
             <TextBlock Text="E-mail: " VerticalAlignment="Center"/>
             <TextBox Text="tensei@overrustlelogs.net" IsReadOnly="True" Width="Auto"/>
+        </StackPanel>
+        <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="2">
+            <TextBlock Text="UniqueId: " VerticalAlignment="Center"/>
+            <TextBox Text="{Binding DataContext.Id, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}" 
+                     IsReadOnly="True" Width="Auto"/>
         </StackPanel>
     </Grid>
 </UserControl>

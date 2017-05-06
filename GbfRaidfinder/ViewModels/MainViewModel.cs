@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Media;
@@ -51,6 +52,7 @@ namespace GbfRaidfinder.ViewModels {
             StartLoginCommand = new ActionCommand(() => _loginController.StartNewLogin());
             MoveLeftCommand = new ActionCommand(f => MoveLeft((FollowModel) f));
             MoveRightCommand = new ActionCommand(f => MoveRight((FollowModel) f));
+            AddNewRaidCommand = new ActionCommand(async () => await DialogHost.Show(new AddRaidDialog(controllerFactory.GetRaidlistController.RaidBossListItems)));
 
             _tweetObserver.Stream.MatchingTweetReceived += StreamOnMatchingTweetReceived;
             _tweetObserver.Stream.NonMatchingTweetReceived += StreamOnNonMatchingTweetReceived;
@@ -60,9 +62,11 @@ namespace GbfRaidfinder.ViewModels {
             Startup();
 #endif
             CheckUpdate();
+            Id = UniqueId.Create();
         }
 
         public SettingsModel Settings { get; set; }
+        public string Id { get; set; }
 
         public ObservableCollection<FollowModel> Follows { get; }
         public ReadOnlyObservableCollection<RaidListItem> RaidBosses { get; }
@@ -71,8 +75,10 @@ namespace GbfRaidfinder.ViewModels {
         public ICommand RemoveCommand { get; }
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
+        public ICommand AddNewRaidCommand { get; }
 
         public RaidListViewModel RaidListCtx { get; set; }
+
 
         private void Startup() {
             if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) &&

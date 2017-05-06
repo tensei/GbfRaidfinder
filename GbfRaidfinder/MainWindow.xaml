@@ -54,7 +54,13 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Raids" FontSize="24" Grid.Column="0" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                <TextBlock Text="Raids" FontSize="24" VerticalAlignment="Center"/>
+                                <Button Style="{DynamicResource MaterialDesignToolButton}" materialDesign:RippleAssist.IsCentered="True"
+                                        Command="{Binding AddNewRaidCommand}">
+                                    <materialDesign:PackIcon Kind="Plus" Height="24" Width="24"/>
+                                </Button>
+                            </StackPanel>
                             <ToggleButton Grid.Column="2" HorizontalAlignment="Right"
                                           Style="{DynamicResource MaterialDesignHamburgerToggleButton}" 
                                           IsChecked="{Binding IsChecked, ElementName=toggleButton, Mode=TwoWay}">

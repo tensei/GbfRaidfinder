@@ -7,5 +7,6 @@ namespace GbfRaidfinder.Data {
         public string Japanese { get; set; }
         public string Image { get; set; }
         public bool Following { get; set; }
+        public bool Visibility { get; set; } = true;
     }
 }

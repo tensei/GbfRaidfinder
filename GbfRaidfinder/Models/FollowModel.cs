@@ -88,7 +88,9 @@ namespace GbfRaidfinder.Models {
             tweetInfo.Clicked = !tweetInfo.Clicked;
         }
 
-        private readonly WebClient _webClient = new WebClient();
+        private readonly WebClient _webClient = new WebClient{Headers = {
+                {"Application-Id",Credentials.AppId }
+        }};
         private async Task TranslateMessage(ITweetInfo tweet) {
             if (string.IsNullOrWhiteSpace(tweet.Text)) {
                 return;
@@ -96,22 +98,16 @@ namespace GbfRaidfinder.Models {
 
             const string target = "en";
             const string source = "ja";
-            var key = Credentials.GoogleApiKey;
-            var link = $"https://translation.googleapis.com/language/translate/v2?key={key}&source={source}&target={target}&q={tweet.Text}";
+            var link = $"http://tensei.moe/api/v1/translate?t={target}&s={source}&q={tweet.Text}";
 
             try {
                 var response = await _webClient.DownloadStringTaskAsync(new Uri(link));
-
-                var jsonSettings = new JsonSerializerSettings {
-                    ObjectCreationHandling = ObjectCreationHandling.Auto,
-                    DefaultValueHandling = DefaultValueHandling.Populate,
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-                var resp = JsonConvert.DeserializeObject<TranslationResponse>(response, jsonSettings);
-                tweet.Text = resp.data.translations[0].translatedText;
-                Console.WriteLine(response);
-            } catch (WebException e) {
-                Console.WriteLine(e.Status);
+                if (response == "error") { 
+                    return;
+                }
+                tweet.Text = response;
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
             }
         }
 

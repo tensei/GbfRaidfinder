@@ -13,10 +13,26 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" VerticalAlignment="Stretch">
-            <ItemsControl ItemsSource="{Binding RaidListItems}">
+        <materialDesign:ColorZone Mode="Standard" Padding="8 4 8 4" CornerRadius="2" Panel.ZIndex="1"
+                                  Margin="5" VerticalAlignment="Center"
+                                  materialDesign:ShadowAssist.ShadowDepth="Depth1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <materialDesign:PackIcon Kind="Magnify" Opacity=".56" VerticalAlignment="Center"/>
+                <TextBox TextChanged="TextBoxBase_OnTextChanged"
+                         Grid.Column="1" Margin="8 0 0 0" materialDesign:HintAssist.Hint="Search" 
+                         materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0"
+                         MinWidth="200" VerticalAlignment="Center" />
+            </Grid>
+        </materialDesign:ColorZone>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" VerticalAlignment="Stretch">
+            <ItemsControl ItemsSource="{Binding RaidListItems}" x:Name="itemsControl">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel IsItemsHost="True" Orientation="Vertical" VirtualizationMode="Recycling"/>
@@ -24,10 +40,12 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type data:RaidListItem}">
-                        <Button BorderThickness="0" Background="Transparent" Padding="0" Width="300" Height="100"
+                        <Button BorderThickness="0" Background="Transparent" Padding="0" Width="300" Height="100" 
+                                Visibility="{Binding Visibility, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Command="{Binding DataContext.AddCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RaidBossesView}}}" 
-                                CommandParameter="{Binding}">
-                            <Grid>
+                                CommandParameter="{Binding}"
+                                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                            <Grid >
                                 <Image Source="{Binding Image}" Stretch="UniformToFill"/>
                                 <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" HorizontalAlignment="Left">
                                     <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold" Margin="6,0">

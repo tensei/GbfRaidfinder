@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using GbfRaidfinder.Data;
 using GbfRaidfinder.Interfaces;
 using Newtonsoft.Json;
@@ -14,18 +16,18 @@ namespace GbfRaidfinder.Common {
         public ObservableCollection<RaidListItem> RaidBossListItems { get; set; }
 
         public void Load() {
+            ObservableCollection<RaidListItem> remote;
             try{
                 var web = new WebClient {
                     Encoding = Encoding.UTF8
                 };
                 var js = web.DownloadString("https://raw.githubusercontent.com/tensei/GbfRaidfinder/master/List/Raidlist.json");
 
-                RaidBossListItems = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(js);
-                Save();
-                return;
+                remote = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(js);
             } catch {
-                //ignore
+                remote = new ObservableCollection<RaidListItem>(Raids.RaidBosses);
             }
+            ObservableCollection<RaidListItem> local;
             if (File.Exists(_configFile)) {
                 var input = File.ReadAllText(_configFile);
 
@@ -34,12 +36,12 @@ namespace GbfRaidfinder.Common {
                     DefaultValueHandling = DefaultValueHandling.Populate,
                     NullValueHandling = NullValueHandling.Ignore
                 };
-                RaidBossListItems = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(input,
+                local = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(input,
                     jsonSettings);
+            } else {
+                local = new ObservableCollection<RaidListItem>(Raids.RaidBosses);
             }
-            else {
-                RaidBossListItems = new ObservableCollection<RaidListItem>(Raids.RaidBosses);
-            }
+            CombineLists(local.ToList(), remote.ToList());
             Save();
         }
 
@@ -62,6 +64,23 @@ namespace GbfRaidfinder.Common {
             catch (Exception) {
                 //ignore
             }
+        }
+
+        private void CombineLists(List<RaidListItem> local, List<RaidListItem> remote) {
+            var finallist = new ObservableCollection<RaidListItem>();
+            foreach (var t in remote) {
+                finallist.Add(t);
+            }
+            var finalenamesEn = finallist.Select(l => l.English.ToLower());
+            var finenamesJa = finallist.Select(l => l.Japanese.ToLower());
+
+            for (var i = 0; i < local.Count; i++) {
+                if (!finalenamesEn.Contains(local[i].English.ToLower()) && !finenamesJa.Contains(local[i].Japanese.ToLower())) {
+                    finallist.Insert(i, local[i]);
+                }
+            }
+            RaidBossListItems = finallist;
+            Save();
         }
     }
 }
