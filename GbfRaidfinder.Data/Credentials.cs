@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GbfRaidfinder.Data {
     public static class Credentials {
-        public static readonly string TwitterConsumerKey = "";
-        public static readonly string TwitterConsumerSecret = "";
-
-        public static readonly string AppId = "";
+        public const string TwitterConsumerKey = "";
+        public const string TwitterConsumerSecret = "";
+        
+        public const string AppId = "";
     }
 }
