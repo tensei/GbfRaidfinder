@@ -21,7 +21,7 @@
         <TextBlock Text="Information" FontSize="24"/>
         <Separator Grid.Row="1"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="2">
-            <TextBlock Text="Github:"/>
+            <TextBlock Text="Github:" VerticalAlignment="Center"/>
             <Button Content="https://github.com/tensei/GbfRaidfinder" Margin="5,0" 
                     Click="ButtonBase_OnClick1"
                     Style="{DynamicResource MaterialDesignFlatButton}"/>
