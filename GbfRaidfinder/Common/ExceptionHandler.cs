@@ -34,6 +34,7 @@ namespace GbfRaidfinder.Common {
             var request = new RestRequest(Method.POST) {
                 RequestFormat = DataFormat.Json,
             };
+            request.AddHeader("Application-Id", Credentials.AppId);
             request.AddHeader("Application-UserId", UniqueId.Id);
             request.AddHeader("Application-Name", "GbfRaidfinder");
             request.AddHeader("Accept", "application/json");
