@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using GbfRaidfinder.Factorys;
@@ -11,12 +13,13 @@ namespace GbfRaidfinder {
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow {
-        private readonly ControllerFactory _controllerFactory;
+        private readonly IControllerFactory _controllerFactory;
 
-        public MainWindow(ITweetProcessor tweetProcessor, ControllerFactory controllerFactory) {
+        public MainWindow(IControllerFactory controllerFactory,
+            ITwitterAuthenticator twitterAuthenticator, IGlobalVariables globalVariables, SettingsViewModel settingsViewModel) {
             _controllerFactory = controllerFactory;
             InitializeComponent();
-            DataContext = new MainViewModel(tweetProcessor, controllerFactory);
+            DataContext = new MainViewModel(controllerFactory, twitterAuthenticator, globalVariables, settingsViewModel);
         }
 
 
@@ -34,7 +37,9 @@ namespace GbfRaidfinder {
         private void ToggleButton_Click(object sender, RoutedEventArgs e) {
             var tgglbtn = sender as ToggleButton;
             var ch = tgglbtn?.IsChecked;
-            if (ch == null) return;
+            if (ch == null) {
+                return;
+            }
             if ((bool) ch) {
                 tgglbtn.ToolTip = "Global Sounds ON.";
                 return;
@@ -45,8 +50,10 @@ namespace GbfRaidfinder {
         private void ToggleButton2_Click(object sender, RoutedEventArgs e) {
             var tgglbtn = sender as ToggleButton;
             var ch = tgglbtn?.IsChecked;
-            if (ch == null) return;
-            if ((bool)ch) {
+            if (ch == null) {
+                return;
+            }
+            if ((bool) ch) {
                 tgglbtn.ToolTip = "Global Copy ON.";
                 return;
             }
@@ -55,6 +62,15 @@ namespace GbfRaidfinder {
 
         private void MenuItem_OnClick(object sender, RoutedEventArgs e) {
             Close();
+        }
+
+        private void Donate_OnClick(object sender, RoutedEventArgs e) {
+            try {
+                Process.Start("https://twitch.streamlabs.com/tenseyi#/");
+            }
+            catch (Exception exception) {
+                Console.WriteLine(exception);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using GbfRaidfinder.Twitter;
+﻿using GbfRaidfinder.Models;
 using Tweetinvi.Models;
 
 namespace GbfRaidfinder.Interfaces {

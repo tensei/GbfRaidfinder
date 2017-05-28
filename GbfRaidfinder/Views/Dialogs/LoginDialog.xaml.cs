@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace GbfRaidfinder.Views {
+namespace GbfRaidfinder.Views.Dialogs {
     /// <summary>
     ///     Interaction logic for LoginDialog.xaml
     /// </summary>

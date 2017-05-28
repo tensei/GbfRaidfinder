@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="GbfRaidfinder.Views.Dialogs.AddRaidDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:GbfRaidfinder.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone Padding="4" materialDesign:ShadowAssist.ShadowDepth="Depth2">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">Add New Raids</TextBlock>
+                <Button HorizontalAlignment="Right" Padding="1" Height="25" Width="25"
+                        Style="{DynamicResource MaterialDesignToolButton}"
+                        Command="materialDesign:DialogHost.CloseDialogCommand">
+                    <materialDesign:PackIcon Kind="Close" />
+                </Button>
+            </Grid>
+        </materialDesign:ColorZone>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBox x:Name="En" materialDesign:HintAssist.Hint="English" Margin="3"
+                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden" />
+
+            <TextBox x:Name="Ja" Grid.Row="1" materialDesign:HintAssist.Hint="Japanese" Margin="3"
+                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden" />
+
+            <TextBox x:Name="Link" Grid.Row="2" materialDesign:HintAssist.Hint="Twitter image link" Margin="3"
+                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden" />
+
+            <Button Click="ButtonBase_OnClick" Grid.Row="3"
+                    Margin="5"
+                    Command="materialDesign:DialogHost.CloseDialogCommand">
+                ADD
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

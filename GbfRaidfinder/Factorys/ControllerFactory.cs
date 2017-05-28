@@ -1,10 +1,10 @@
-﻿using GbfRaidfinder.Common;
-using GbfRaidfinder.Interfaces;
+﻿using GbfRaidfinder.Interfaces;
 
 namespace GbfRaidfinder.Factorys {
-    public class ControllerFactory {
+    public class ControllerFactory : IControllerFactory {
         public ControllerFactory(ISettingsController settingsController, ITweetObserver tweetObserver,
-            IRaidsController raidsController, IRaidlistController raidlistController, IBlacklistController blacklistController) {
+            IRaidsController raidsController, IRaidlistController raidlistController,
+            IBlacklistController blacklistController) {
             GetSettingsController = settingsController;
             GetTweetObserver = tweetObserver;
             GetRaidsController = raidsController;
@@ -25,7 +25,5 @@ namespace GbfRaidfinder.Factorys {
 
         public ITweetObserver GetTweetObserver { get; }
         public IBlacklistController GetBlacklistController { get; }
-
-        public ILoginController CreateLoginController => new LoginController(GetSettingsController);
     }
 }

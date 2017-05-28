@@ -32,46 +32,38 @@
                     </Grid.ColumnDefinitions>
                     <Image Source="{Binding Image}" Stretch="UniformToFill" Grid.ColumnSpan="2"
                            Visibility="{Binding ImageVisibility, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <StackPanel Grid.Column="0" Margin="4">
+                    <StackPanel Grid.Column="0" Margin="4" VerticalAlignment="Center">
                         <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold">
                             <TextBlock.Effect>
                                 <DropShadowEffect ShadowDepth="0"
-                                                                      Color="Black"
-                                                                      Opacity="1"
-                                                                      BlurRadius="5"/>
+                                                  Color="Black"
+                                                  Opacity="1"
+                                                  BlurRadius="5" />
                             </TextBlock.Effect>
                         </TextBlock>
-                        <TextBlock Text="{Binding Japanese}" FontWeight="Bold" >
+                        <TextBlock Text="{Binding Japanese}" FontWeight="Bold">
                             <TextBlock.Effect>
                                 <DropShadowEffect ShadowDepth="0"
-                                                                      Color="Black"
-                                                                      Opacity="1"
-                                                                      BlurRadius="5"/>
+                                                  Color="Black"
+                                                  Opacity="1"
+                                                  BlurRadius="5" />
                             </TextBlock.Effect>
                         </TextBlock>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="4"
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
-                        <Button
-                            Command="{Binding DataContext.MoveLeftCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
-                            CommandParameter="{Binding}"
-                            Style="{DynamicResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="ArrowLeft" Foreground="{DynamicResource AccentColorBrush}" />
-                        </Button>
-                        <Button
-                            Command="{Binding DataContext.MoveRightCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
-                            CommandParameter="{Binding}"
-                            Style="{DynamicResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="ArrowRight" Foreground="{DynamicResource AccentColorBrush}" />
-                        </Button>
                         <Button Command="{x:Static materialDesign:Transitioner.MoveLastCommand}"
-                                Style="{DynamicResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="Settings" Foreground="{DynamicResource AccentColorBrush}" />
+                                Style="{DynamicResource MaterialDesignToolButton}" Padding="1" Height="50" Width="50"
+                                materialDesign:RippleAssist.IsCentered="True">
+                            <materialDesign:PackIcon Kind="Settings" Foreground="{DynamicResource AccentColorBrush}"
+                                                     Height="30" Width="30" />
                         </Button>
-                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                        <Button Style="{DynamicResource MaterialDesignToolButton}" Padding="1" Height="50" Width="50"
                                 Command="{Binding DataContext.RemoveCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type gbfRaidfinder:MainWindow}}}"
-                                CommandParameter="{Binding Japanese}">
-                            <materialDesign:PackIcon Kind="Close" Foreground="{DynamicResource AccentColorBrush}" />
+                                CommandParameter="{Binding Japanese}"
+                                materialDesign:RippleAssist.IsCentered="True">
+                            <materialDesign:PackIcon Kind="Close" Foreground="{DynamicResource AccentColorBrush}"
+                                                     Height="30" Width="30" />
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -93,19 +85,19 @@
                                             <ContextMenu>
                                                 <MenuItem Header="Translate"
                                                           Command="{Binding PlacementTarget.Tag.TranslateCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding}"/>
+                                                          CommandParameter="{Binding}" />
                                                 <MenuItem Header="Copy Tweet link"
                                                           Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding Profile}"/>
+                                                          CommandParameter="{Binding Profile}" />
                                                 <MenuItem Header="Copy Avatar link"
                                                           Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding Avatar}"/>
+                                                          CommandParameter="{Binding Avatar}" />
                                                 <MenuItem Header="Copy Text"
                                                           Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding Text}"/>
+                                                          CommandParameter="{Binding Text}" />
                                                 <MenuItem Header="Blacklist User"
                                                           Command="{Binding PlacementTarget.Tag.BlacklistCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding User}"/>
+                                                          CommandParameter="{Binding User}" />
                                             </ContextMenu>
                                         </Button.ContextMenu>
                                         <Grid>
@@ -114,19 +106,34 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <Image Source="{Binding Avatar}" MaxHeight="20" Margin="0,0,5,0"/>
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding User}" VerticalAlignment="Center"
+                                            <Image Source="{Binding Avatar}" MaxHeight="20" Margin="0,0,5,0" />
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding User}"
+                                                       VerticalAlignment="Center"
                                                        HorizontalAlignment="Left" TextWrapping="Wrap" />
                                             <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Time}"
                                                        VerticalAlignment="Center"
                                                        HorizontalAlignment="Right" Margin="10,0" />
                                             <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Id}"
                                                        VerticalAlignment="Center" FontWeight="Bold" />
+                                            <Button Grid.Row="1" Grid.Column="0" Padding="4,8"
+                                                    VerticalAlignment="Stretch"
+                                                    HorizontalAlignment="Stretch"
+                                                    Foreground="White"
+                                                    ToolTip="Google Translate"
+                                                    materialDesign:RippleAssist.IsCentered="True"
+                                                    materialDesign:RippleAssist.ClipToBounds="True"
+                                                    Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
+                                                    Style="{DynamicResource MaterialDesignToolButton}"
+                                                    Command="{Binding DataContext.TranslateCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
+                                                    CommandParameter="{Binding}" Panel.ZIndex="1">
+                                                <materialDesign:PackIcon Kind="GoogleTranslate" />
+                                            </Button>
                                             <materialDesign:Card Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
                                                                  Padding="4" Margin="4,4,4,0"
                                                                  Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
@@ -154,13 +161,9 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="35" />
-                <RowDefinition Height="35" />
-                <RowDefinition Height="35" />
-                <RowDefinition Height="35" />
-                <RowDefinition Height="*" />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <materialDesign:ColorZone>
+            <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="50">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -171,57 +174,68 @@
                             Style="{DynamicResource MaterialDesignToolButton}">
                         <materialDesign:PackIcon Kind="ArrowLeft" />
                     </Button>
-                    <StackPanel Grid.Column="1" Margin="4">
+                    <StackPanel Grid.Column="1" Margin="4" VerticalAlignment="Center">
                         <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold">
                             <TextBlock.Effect>
                                 <DropShadowEffect ShadowDepth="0"
-                                                                      Color="Black"
-                                                                      Opacity="1"
-                                                                      BlurRadius="5"/>
+                                                  Color="Black"
+                                                  Opacity="1"
+                                                  BlurRadius="5" />
                             </TextBlock.Effect>
                         </TextBlock>
-                        <TextBlock Text="{Binding Japanese}" FontWeight="Bold" >
+                        <TextBlock Text="{Binding Japanese}" FontWeight="Bold">
                             <TextBlock.Effect>
                                 <DropShadowEffect ShadowDepth="0"
-                                                                      Color="Black"
-                                                                      Opacity="1"
-                                                                      BlurRadius="5"/>
+                                                  Color="Black"
+                                                  Opacity="1"
+                                                  BlurRadius="5" />
                             </TextBlock.Effect>
                         </TextBlock>
                     </StackPanel>
                 </Grid>
             </materialDesign:ColorZone>
-            <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="16">
-                <Run Text="Auto Copy" />
-            </TextBlock>
-            <ToggleButton Grid.Row="1" ToolTip="Auto Copy" Margin="5,0" IsChecked="{Binding AutoCopy}"
-                          HorizontalAlignment="Right" />
+            <Grid Margin="4,2" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="16">
-                <Run Text="Sound Notifications" />
-            </TextBlock>
-            <ToggleButton Grid.Row="2" ToolTip="Sound Notifications" Margin="5,0" IsChecked="{Binding Sound}"
-                          HorizontalAlignment="Right" />
+                <TextBlock Grid.Row="1" VerticalAlignment="Center" FontSize="16">
+                    <Run Text="Auto Copy" />
+                </TextBlock>
+                <ToggleButton Grid.Row="1" ToolTip="Auto Copy" Margin="5,0" IsChecked="{Binding AutoCopy}"
+                              HorizontalAlignment="Right" />
 
-            <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16">
-                <Run Text="Sound" />
-            </TextBlock>
-            <ComboBox Grid.Row="3" Margin="5,0" ItemsSource="{Binding SoundFiles}"
-                      SelectedItem="{Binding SelectedSoundFile}"
-                      HorizontalAlignment="Right" Width="200"
-                      SelectedIndex="{Binding SelectedSoundFileIndex}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type models:SoundFileModel}">
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" FontSize="16">
+                    <Run Text="Sound Notifications" />
+                </TextBlock>
+                <ToggleButton Grid.Row="2" ToolTip="Sound Notifications" Margin="5,0" IsChecked="{Binding Sound}"
+                              HorizontalAlignment="Right" />
 
-            <TextBlock Grid.Row="4" VerticalAlignment="Center" FontSize="16">
-                <Run Text="Image" />
-            </TextBlock>
-            <ToggleButton Grid.Row="4" ToolTip="Toggle Image" Margin="5,0" IsChecked="{Binding ImageVisibility}"
-                          HorizontalAlignment="Right" />
+                <TextBlock Grid.Row="3" VerticalAlignment="Center" FontSize="16">
+                    <Run Text="Sound" />
+                </TextBlock>
+                <ComboBox Grid.Row="3" Margin="5,0" ItemsSource="{Binding SoundFiles}"
+                          SelectedItem="{Binding SelectedSoundFile}"
+                          HorizontalAlignment="Right" Width="200"
+                          SelectedIndex="{Binding SelectedSoundFileIndex}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:SoundFileModel}">
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Grid.Row="4" VerticalAlignment="Center" FontSize="16">
+                    <Run Text="Image" />
+                </TextBlock>
+                <ToggleButton Grid.Row="4" ToolTip="Toggle Image" Margin="5,0" IsChecked="{Binding ImageVisibility}"
+                              HorizontalAlignment="Right" />
+            </Grid>
         </Grid>
     </materialDesign:Transitioner>
 </UserControl>

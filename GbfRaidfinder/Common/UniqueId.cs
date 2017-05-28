@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GbfRaidfinder.Common {
-    class UniqueId {
+    internal class UniqueId {
         public static string Id { get; set; }
 
         public static string Create() {
@@ -27,8 +24,8 @@ namespace GbfRaidfinder.Common {
                 var hmm = Environment.UserName;
                 return Sha256(name + hmm);
             }
-
         }
+
         private static string Sha256(string password) {
             var crypt = new SHA256Managed();
             var hash = new StringBuilder();

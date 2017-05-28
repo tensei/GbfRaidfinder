@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="GbfRaidfinder.Views.MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GbfRaidfinder.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dd="urn:gong-wpf-dragdrop"
@@ -22,16 +22,22 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>
+                        <Run Text="Tweetcount:  " />
+                        <Run Text="{Binding TweetCount}" />
+                    </TextBlock>
+                </StackPanel>
                 <TextBlock Grid.Column="2">Raid height</TextBlock>
                 <Slider Grid.Column="3" Margin="5,0"
-                                Maximum="1000" Minimum="200" x:Name="slider"
-                                Value="{Binding Settings.BossFollowHeight, Mode=TwoWay}" />
+                        Maximum="1000" Minimum="200" x:Name="slider"
+                        Value="{Binding Settings.BossFollowHeight, Mode=TwoWay}" />
             </Grid>
         </materialDesign:ColorZone>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" >
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Follows}" VerticalAlignment="Stretch"
-                                      dd:DragDrop.IsDragSource="True"
-                                      dd:DragDrop.IsDropTarget="True">
+                          dd:DragDrop.IsDragSource="True"
+                          dd:DragDrop.IsDropTarget="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Stretch" IsItemsHost="True" Orientation="Horizontal" />
@@ -39,8 +45,10 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:BossView x:Name="Bossview" BorderThickness="0,0,1,1"
-                                                BorderBrush="Black" Height="{Binding Value, ElementName=slider}" />
+                        <materialDesign:Card Background="#282828" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                             Margin="3,0,0,3">
+                            <local:BossView x:Name="Bossview" Height="{Binding Value, ElementName=slider}" />
+                        </materialDesign:Card>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

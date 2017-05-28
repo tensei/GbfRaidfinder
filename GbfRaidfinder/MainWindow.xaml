@@ -6,12 +6,12 @@
                       xmlns:local="clr-namespace:GbfRaidfinder"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:views="clr-namespace:GbfRaidfinder.Views"
-                      xmlns:viewModels="clr-namespace:GbfRaidfinder.ViewModels"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                       xmlns:data="clr-namespace:GbfRaidfinder.Data;assembly=GbfRaidfinder.Data"
                       xmlns:tb="http://www.hardcodet.net/taskbar"
                       xmlns:properties="clr-namespace:GbfRaidfinder.Properties"
                       xmlns:dd="urn:gong-wpf-dragdrop"
+                      xmlns:viewModels1="clr-namespace:GbfRaidfinder.ViewModels"
                       mc:Ignorable="d"
                       Closing="MainWindow_OnClosing"
                       Title="Granblue Fantasy Raidfinder"
@@ -27,16 +27,16 @@
                       NonActiveBorderBrush="Black" NonActiveGlowBrush="Black" BorderThickness="1"
                       NonActiveWindowTitleBrush="{DynamicResource WindowTitleColorBrush}"
                       BorderBrush="{DynamicResource AccentColorBrush}"
-                      d:DataContext="{d:DesignInstance {x:Type viewModels:MainViewModel}, IsDesignTimeCreatable=False}">
+                      d:DataContext="{d:DesignInstance {x:Type viewModels1:MainViewModel}, IsDesignTimeCreatable=False}">
     <controls:MetroWindow.LeftWindowCommands>
         <controls:WindowCommands>
-            <Button Command="{Binding StartLoginCommand}">
-                Login
-            </Button>
+            <Button Command="{Binding StartLoginCommand}" Content="Login"
+                    Visibility="{Binding GlobalVariables.IsLoggedIn, Converter={StaticResource InverseBooleanConverter}}" />
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
+            <Label VerticalAlignment="Center" Content="{Binding LoginButtonText}" />
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
     <materialDesign:DialogHost>
@@ -44,94 +44,113 @@
             <materialDesign:DrawerHost.LeftDrawerContent>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <materialDesign:ColorZone Mode="Dark" Padding="4" Margin="0,0,0,4" materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                    <materialDesign:ColorZone Mode="Dark" Padding="4" Margin="0,0,0,4"
+                                              materialDesign:ShadowAssist.ShadowDepth="Depth2">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal" Grid.Column="0">
-                                <TextBlock Text="Raids" FontSize="24" VerticalAlignment="Center"/>
-                                <Button Style="{DynamicResource MaterialDesignToolButton}" materialDesign:RippleAssist.IsCentered="True"
+                                <TextBlock Text="Raids" FontSize="24" VerticalAlignment="Center" />
+                                <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                        materialDesign:RippleAssist.IsCentered="True"
                                         Command="{Binding AddNewRaidCommand}">
-                                    <materialDesign:PackIcon Kind="Plus" Height="24" Width="24"/>
+                                    <materialDesign:PackIcon Kind="Plus" Height="24" Width="24" />
                                 </Button>
                             </StackPanel>
                             <ToggleButton Grid.Column="2" HorizontalAlignment="Right"
-                                          Style="{DynamicResource MaterialDesignHamburgerToggleButton}" 
-                                          IsChecked="{Binding IsChecked, ElementName=toggleButton, Mode=TwoWay}">
-                            </ToggleButton>
+                                          Style="{DynamicResource MaterialDesignHamburgerToggleButton}"
+                                          IsChecked="{Binding IsChecked, ElementName=toggleButton, Mode=TwoWay}" />
                         </Grid>
                     </materialDesign:ColorZone>
-                    <views:RaidBossesView Grid.Row="1" Width="300" DataContext="{Binding RaidListCtx}"/>
+                    <views:RaidBossesView Grid.Row="1" Width="300" DataContext="{Binding RaidListCtx}" />
                 </Grid>
             </materialDesign:DrawerHost.LeftDrawerContent>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <materialDesign:Transitioner Grid.Column="1" SelectedIndex="{Binding IsChecked, ElementName=toggleButton1}">
-                    <views:MainView />
-                    <views:InfoView />
-                </materialDesign:Transitioner>
-                <materialDesign:ColorZone Grid.Column="0" Mode="Dark" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                <materialDesign:ColorZone Grid.Column="0" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                          Mode="PrimaryMid" VerticalAlignment="Stretch">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <ToggleButton x:Name="toggleButton" 
-                                      Style="{DynamicResource MaterialDesignHamburgerToggleButton}" BorderThickness="1"/>
-                        <ToggleButton Grid.Row="1" Height="50" Width="50"
-                                      Style="{DynamicResource MaterialDesignActionToggleButton}"
-                                      Background="Transparent"
-                                      IsChecked="{Binding Settings.GlobalSound}"
-                                      Checked="ToggleButton_Click"
-                                      Unchecked="ToggleButton_Click"
-                                      >
-                            <ToggleButton.Content>
-                                <materialDesign:PackIcon Kind="BellOutline" Width="30" Height="30"/>
-                            </ToggleButton.Content>
-                            <materialDesign:ToggleButtonAssist.OnContent>
-                                <materialDesign:PackIcon Kind="BellRing" Width="30" Height="30"/>
-                            </materialDesign:ToggleButtonAssist.OnContent>
-                        </ToggleButton>
-                        <ToggleButton Grid.Row="2" Height="50" Width="50"
-                                      Style="{DynamicResource MaterialDesignActionToggleButton}"
-                                      Background="Transparent"
-                                      IsChecked="{Binding Settings.GlobalCopy}"
-                                      Checked="ToggleButton2_Click"
-                                      Unchecked="ToggleButton2_Click">
-                            <ToggleButton.Content>
-                                <materialDesign:PackIcon Kind="ClipboardOutline" Width="30" Height="30"/>
-                            </ToggleButton.Content>
-                            <materialDesign:ToggleButtonAssist.OnContent>
-                                <materialDesign:PackIcon Kind="Clipboard" Width="30" Height="30"/>
-                            </materialDesign:ToggleButtonAssist.OnContent>
-                        </ToggleButton>
-                        <ToggleButton x:Name="toggleButton1" Grid.Row="3" Height="50" Width="50" 
-                                      Style="{DynamicResource MaterialDesignActionToggleButton}"
-                                      VerticalAlignment="Bottom" Background="Transparent">
-                            <ToggleButton.Content>
-                                <materialDesign:PackIcon Kind="InformationOutline" Width="30" Height="30"/>
-                            </ToggleButton.Content>
-                            <materialDesign:ToggleButtonAssist.OnContent>
-                                <materialDesign:PackIcon Kind="Information" Width="30" Height="30"/>
-                            </materialDesign:ToggleButtonAssist.OnContent>
-                        </ToggleButton>
+
+                        <StackPanel Grid.Row="1">
+                            <ToggleButton x:Name="toggleButton"
+                                          Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
+                            <ToggleButton Height="50" Width="50"
+                                          Style="{DynamicResource MaterialDesignActionToggleButton}"
+                                          Background="Transparent"
+                                          IsChecked="{Binding Settings.GlobalSound}"
+                                          Checked="ToggleButton_Click"
+                                          Unchecked="ToggleButton_Click">
+                                <ToggleButton.Content>
+                                    <materialDesign:PackIcon Kind="BellOutline" Width="30" Height="30" />
+                                </ToggleButton.Content>
+                                <materialDesign:ToggleButtonAssist.OnContent>
+                                    <materialDesign:PackIcon Kind="BellRing" Width="30" Height="30" />
+                                </materialDesign:ToggleButtonAssist.OnContent>
+                            </ToggleButton>
+                            <ToggleButton Height="50" Width="50"
+                                          Style="{DynamicResource MaterialDesignActionToggleButton}"
+                                          Background="Transparent"
+                                          IsChecked="{Binding Settings.GlobalCopy}"
+                                          Checked="ToggleButton2_Click"
+                                          Unchecked="ToggleButton2_Click">
+                                <ToggleButton.Content>
+                                    <materialDesign:PackIcon Kind="ClipboardOutline" Width="30" Height="30" />
+                                </ToggleButton.Content>
+                                <materialDesign:ToggleButtonAssist.OnContent>
+                                    <materialDesign:PackIcon Kind="Clipboard" Width="30" Height="30" />
+                                </materialDesign:ToggleButtonAssist.OnContent>
+                            </ToggleButton>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Bottom" Grid.Row="2">
+                            <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                    Command="{Binding ChangeViewCommand}" CommandParameter="2"
+                                    materialDesign:RippleAssist.IsCentered="True"
+                                    materialDesign:RippleAssist.ClipToBounds="True"
+                                    Height="50" Width="50" Padding="3"
+                                    Foreground="White">
+                                <materialDesign:PackIcon Kind="Settings" Height="30" Width="30"/>
+                            </Button>
+                            <Button Style="{DynamicResource MaterialDesignToolButton}" Foreground="Crimson"
+                                    materialDesign:RippleAssist.IsCentered="True"
+                                    materialDesign:RippleAssist.ClipToBounds="True"
+                                    Height="50" Width="50" Padding="3"
+                                    Click="Donate_OnClick"
+                                    ToolTip="Donate here :)">
+                                <materialDesign:PackIcon Kind="Heart" Width="30" Height="30" />
+                            </Button>
+                            <Button Height="50" Width="50" Padding="3" Foreground="White"
+                                    materialDesign:RippleAssist.IsCentered="True"
+                                    materialDesign:RippleAssist.ClipToBounds="True"
+                                    Command="{Binding ChangeViewCommand}" CommandParameter="1"
+                                    Style="{DynamicResource MaterialDesignToolButton}">
+                                    <materialDesign:PackIcon Kind="Information" Width="30" Height="30" />
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </materialDesign:ColorZone>
-                <tb:TaskbarIcon Grid.Column="1" IconSource="Assets/testicon.ico" >
+                <materialDesign:Transitioner Grid.Column="1" SelectedIndex="{Binding TransitionerIndex}">
+                    <views:MainView />
+                    <views:InfoView />
+                    <views:SettingsView DataContext="{Binding SettingsDataContext}"/>
+                </materialDesign:Transitioner>
+                <tb:TaskbarIcon Grid.Row="0" Grid.Column="1" IconSource="Assets/testicon.ico">
                     <tb:TaskbarIcon.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Exit" Click="MenuItem_OnClick"/>
+                            <MenuItem Header="Exit" Click="MenuItem_OnClick" />
                         </ContextMenu>
                     </tb:TaskbarIcon.ContextMenu>
                 </tb:TaskbarIcon>

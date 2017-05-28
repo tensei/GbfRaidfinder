@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using GbfRaidfinder.Interfaces;
+using GbfRaidfinder.Models;
 using Tweetinvi.Models;
 
 namespace GbfRaidfinder.Twitter {
@@ -7,7 +8,9 @@ namespace GbfRaidfinder.Twitter {
         private const string RaidRegexEnglish = "((?s).*)I need backup!Battle ID: (?<id>[0-9A-F]+)\n(.+)\n?(.*)";
         private const string RaidRegexJapanese = "((?s).*)参加者募集！参戦ID：(?<id>[0-9A-F]+)\n(.+)\n?(.*)";
 
-        public TweetInfo RecievedTweetInfo(ITweet tweet) => StreamOnNonMatchingTweetReceived(tweet);
+        public TweetInfo RecievedTweetInfo(ITweet tweet) {
+            return StreamOnNonMatchingTweetReceived(tweet);
+        }
 
         private TweetInfo StreamOnNonMatchingTweetReceived(ITweet tweet) {
             //Console.WriteLine(tweet.Text);

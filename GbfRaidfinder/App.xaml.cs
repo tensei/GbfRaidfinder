@@ -2,6 +2,7 @@
 using System.Windows;
 using GbfRaidfinder.Common;
 using GbfRaidfinder.Data;
+using GbfRaidfinder.Factorys;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Twitter;
 using GbfRaidfinder.ViewModels;
@@ -19,13 +20,18 @@ namespace GbfRaidfinder {
 
             var container = new UnityContainer();
             container.RegisterType<Raids>();
+            container.RegisterInstance<IGlobalVariables>(new GlobalVariables());
+            container.RegisterType<IControllerFactory, ControllerFactory>();
             container.RegisterInstance<ISettingsController>(new SettingsController());
+            container.RegisterInstance<ITwitterAuthenticator>(
+                new TwitterAuthenticator(container.Resolve<ISettingsController>()));
             container.RegisterInstance<IBlacklistController>(new BlacklistController());
-            container.RegisterInstance<IRaidsController>(new RaidsController(container.Resolve<IBlacklistController>()));
+            container.RegisterInstance<IRaidsController>(
+                new RaidsController(container.Resolve<IBlacklistController>()));
             container.RegisterInstance<IRaidlistController>(new RaidListController());
             container.RegisterInstance<ITweetProcessor>(new TweetProcessor());
-            container.RegisterType<ILoginController, LoginController>();
             container.RegisterType<ITweetObserver, TweetObserver>();
+            container.RegisterType<SettingsViewModel>();
             container.RegisterType<MainViewModel>();
             container.RegisterType<MainWindow>();
             container.Resolve<MainWindow>().Show();

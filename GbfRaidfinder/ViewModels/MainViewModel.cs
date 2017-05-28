@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Media;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -12,135 +11,122 @@ using GbfRaidfinder.Data;
 using GbfRaidfinder.Factorys;
 using GbfRaidfinder.Interfaces;
 using GbfRaidfinder.Models;
-using GbfRaidfinder.Twitter;
-using GbfRaidfinder.Views;
+using GbfRaidfinder.Views.Dialogs;
 using MaterialDesignThemes.Wpf;
 using PropertyChanged;
-using Tweetinvi.Events;
+using Tweetinvi;
 using Tweetinvi.Models;
 
 namespace GbfRaidfinder.ViewModels {
-    [ImplementPropertyChanged]
-    public class MainViewModel {
-        private readonly ILoginController _loginController;
-        private readonly IRaidsController _raidsController;
-        private readonly ISettingsController _settingsController;
-        private readonly SoundPlayer _soudplayer = new SoundPlayer(@"assets\notification.wav");
-        private readonly ITweetObserver _tweetObserver;
-        private readonly ITweetProcessor _tweetProcessor;
+    public class MainViewModel :INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public IGlobalVariables GlobalVariables { get; }
         private readonly IBlacklistController _blacklistController;
 
-        private readonly ITwitterCredentials _twitterCredentials = new TwitterCredentials(Credentials.TwitterConsumerKey,
-            Credentials.TwitterConsumerSecret);
+        private readonly IControllerFactory _controllerFactory;
+        private readonly IRaidsController _raidsController;
+        private readonly SoundPlayer _soudplayer = new SoundPlayer(@"assets\notification.wav");
+        private readonly ITweetObserver _tweetObserver;
+        private readonly ITwitterAuthenticator _twitterAuthenticator;
 
-        private readonly ControllerFactory _controllerFactory;
+        private IAuthenticatedUser _user;
 
-        public MainViewModel(ITweetProcessor tweetProcessor, ControllerFactory controllerFactory) {
-            _tweetProcessor = tweetProcessor;
+        public MainViewModel(IControllerFactory controllerFactory,
+            ITwitterAuthenticator twitterAuthenticator, IGlobalVariables globalVariables, SettingsViewModel settingsViewModel) {
+            GlobalVariables = globalVariables;
             _raidsController = controllerFactory.GetRaidsController;
-            _loginController = controllerFactory.CreateLoginController;
             _tweetObserver = controllerFactory.GetTweetObserver;
-            _settingsController = controllerFactory.GetSettingsController;
+            var settingsController = controllerFactory.GetSettingsController;
             _blacklistController = controllerFactory.GetBlacklistController;
             _controllerFactory = controllerFactory;
+            _twitterAuthenticator = twitterAuthenticator;
             Follows = _raidsController.Follows;
+            SettingsDataContext = settingsViewModel;
             RaidListCtx = new RaidListViewModel(controllerFactory);
             RaidBosses =
-                new ReadOnlyObservableCollection<RaidListItem>(controllerFactory.GetRaidlistController.RaidBossListItems);
-            Settings = _settingsController.Settings;
+                new ReadOnlyObservableCollection<RaidListItem>(
+                    controllerFactory.GetRaidlistController.RaidBossListItems);
+            Settings = settingsController.Settings;
             RemoveCommand = new ActionCommand(r => Remove((string) r));
-            StartLoginCommand = new ActionCommand(() => _loginController.StartNewLogin());
-            MoveLeftCommand = new ActionCommand(f => MoveLeft((FollowModel) f));
-            MoveRightCommand = new ActionCommand(f => MoveRight((FollowModel) f));
-            AddNewRaidCommand = new ActionCommand(async () => await DialogHost.Show(new AddRaidDialog(controllerFactory.GetRaidlistController.RaidBossListItems)));
+            StartLoginCommand = new ActionCommand(async () => await Startup());
+            AddNewRaidCommand =
+                new ActionCommand(async () => await DialogHost.Show(new AddRaidDialog(controllerFactory
+                    .GetRaidlistController.RaidBossListItems)));
+            ChangeViewCommand = new ActionCommand(i => ChangeView((string)i));
 
-            _tweetObserver.Stream.MatchingTweetReceived += StreamOnMatchingTweetReceived;
-            _tweetObserver.Stream.NonMatchingTweetReceived += StreamOnNonMatchingTweetReceived;
-            _tweetObserver.Stream.StreamStopped += StreamOnStreamStopped;
-            _tweetObserver.Stream.DisconnectMessageReceived += StreamOnDisconnectMessageReceived;
-#if !DEBUG
-            Startup();
-#endif
+            _tweetObserver.SetAddAction(AddTweet);
             CheckUpdate();
             Id = UniqueId.Create();
+            if (settingsController.Settings.Autologin && 
+                !string.IsNullOrWhiteSpace(settingsController.Settings.AccessToken) && 
+                !string.IsNullOrWhiteSpace(settingsController.Settings.AccessTokenSecret)) {
+                Startup().ConfigureAwait(false);
+            }
+            //Console.WriteLine(new List<string>()[4]);
         }
 
         public SettingsModel Settings { get; set; }
         public string Id { get; set; }
+        public int TweetCount { get; set; }
 
         public ObservableCollection<FollowModel> Follows { get; }
         public ReadOnlyObservableCollection<RaidListItem> RaidBosses { get; }
 
         public ICommand StartLoginCommand { get; }
         public ICommand RemoveCommand { get; }
-        public ICommand MoveLeftCommand { get; }
-        public ICommand MoveRightCommand { get; }
         public ICommand AddNewRaidCommand { get; }
 
         public RaidListViewModel RaidListCtx { get; set; }
 
+        public string LoginButtonText { get; set; }
+        
+        public int TransitionerIndex { get; set; }
 
-        private void Startup() {
-            if (string.IsNullOrWhiteSpace(_settingsController.Settings.AccessToken) &&
-                string.IsNullOrWhiteSpace(_settingsController.Settings.AccessTokenSecret)) {
+        public ICommand ChangeViewCommand { get; }
+
+        public SettingsViewModel SettingsDataContext { get; }
+
+        private void ChangeView(string viewIndex) {
+            var index = int.Parse(viewIndex);
+            if (index == TransitionerIndex) {
+                TransitionerIndex = 0;
                 return;
             }
-            _twitterCredentials.AccessTokenSecret = _settingsController.Settings.AccessTokenSecret;
-            _twitterCredentials.AccessToken = _settingsController.Settings.AccessToken;
-            _tweetObserver.Run(_twitterCredentials);
+            TransitionerIndex = index;
         }
 
-        private void StreamOnDisconnectMessageReceived(object sender, DisconnectedEventArgs disconnectedEventArgs) {
-            _tweetObserver.Running = false;
-            Startup();
-        }
-
-        private void StreamOnStreamStopped(object sender, StreamExceptionEventArgs streamExceptionEventArgs) {
-            var ok = MessageBox.Show("Something went wrong relog please!", "Error", MessageBoxButton.OKCancel,
-                MessageBoxImage.Error);
-            if (ok != MessageBoxResult.OK) {
-                return;
+        private async Task Startup() {
+            if (_tweetObserver.Stream.StreamState == StreamState.Running
+                || _tweetObserver.Stream.StreamState == StreamState.Pause) {
+                _tweetObserver.Stream.StopStream();
             }
-            Application.Current.Dispatcher.BeginInvoke(new Action(async () => {
-                var creds = await _loginController.StartNewLogin();
-                _tweetObserver.Run(creds);
-            }));
-        }
-
-        private void StreamOnNonMatchingTweetReceived(object sender, TweetEventArgs tweetEventArgs) {
-            var tweet = _tweetProcessor.RecievedTweetInfo(tweetEventArgs.Tweet);
-            if (tweet == null) {
-                return;
+            //_tweetObserver.Stream?.StopStream();
+            if (await _twitterAuthenticator.AuthenticateUser()) {
+                _tweetObserver.Run();
+                if (_user == null) {
+                    _user = User.GetAuthenticatedUser();
+                    LoginStatus($"{_user?.Name}");
+                    GlobalVariables.IsLoggedIn = _user.Name != null;
+                }
             }
-            AddTweet(tweet);
         }
 
-        private void StreamOnMatchingTweetReceived(object sender, MatchedTweetReceivedEventArgs tweetEventArgs) {
-            var tweet = _tweetProcessor.RecievedTweetInfo(tweetEventArgs.Tweet);
-            if (tweet == null) {
-                return;
-            }
-            AddTweet(tweet);
-        }
-
-        private void AddTweet(TweetInfo tweet) {
+        private void AddTweet(ITweetInfo tweet) {
             try {
                 Application.Current.Dispatcher.BeginInvoke(new Action(() => {
                     var follow =
                         _raidsController.Follows.FirstOrDefault(
                             f => f.English.Contains(tweet.Boss.Trim()) || f.Japanese.Contains(tweet.Boss.Trim()));
-                    //if (!string.IsNullOrWhiteSpace(tweet.Text) && follow != null) {
-                    //    tweet.Text = await TranslateMessage(tweet.Text);
-                    //}
                     if (_blacklistController.Blacklist.Contains(tweet.User)) {
                         return;
                     }
                     follow?.TweetInfos.Insert(0, tweet);
+                    TweetCount++;
                     if (follow != null && follow.AutoCopy && Settings.GlobalCopy) {
                         try {
                             Clipboard.SetDataObject(tweet.Id);
                         }
-                        catch (Exception){
+                        catch (Exception) {
                             //ignore
                         }
                     }
@@ -162,45 +148,11 @@ namespace GbfRaidfinder.ViewModels {
                 Console.WriteLine(e);
             }
         }
-        
+
         private void Remove(string name) {
-            _raidsController.Follows.RemoveAll(f => f.Japanese == name || f.English == name);
+            _raidsController.Follows.Remove(f => f.Japanese == name || f.English == name);
             _controllerFactory.GetRaidlistController.RaidBossListItems.First(
                 f => f.Japanese == name || f.English == name).Following = false;
-            _raidsController.Save();
-        }
-
-        private void MoveLeft(FollowModel followModel) {
-            var index = 0;
-            for (var i = 0; i < _raidsController.Follows.Count; i++) {
-                if (followModel.English != _raidsController.Follows[i].English) {
-                    continue;
-                }
-                index = i;
-                break;
-            }
-            if (index == 0) {
-                return;
-            }
-            _raidsController.Follows.RemoveAt(index);
-            _raidsController.Follows.Insert(index - 1, followModel);
-            _raidsController.Save();
-        }
-
-        private void MoveRight(FollowModel followModel) {
-            var index = 0;
-            for (var i = 0; i < _raidsController.Follows.Count; i++) {
-                if (followModel.English != _raidsController.Follows[i].English) {
-                    continue;
-                }
-                index = i;
-                break;
-            }
-            if (index == _raidsController.Follows.Count - 1) {
-                return;
-            }
-            _raidsController.Follows.RemoveAt(index);
-            _raidsController.Follows.Insert(index + 1, followModel);
             _raidsController.Save();
         }
 
@@ -208,6 +160,10 @@ namespace GbfRaidfinder.ViewModels {
             if (await UpdateController.Check()) {
                 await DialogHost.Show(new UpdateDialog());
             }
+        }
+
+        private void LoginStatus(string text) {
+            LoginButtonText = text;
         }
     }
 }

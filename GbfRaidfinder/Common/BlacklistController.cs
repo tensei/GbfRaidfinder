@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GbfRaidfinder.Interfaces;
-using GbfRaidfinder.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -25,7 +20,8 @@ namespace GbfRaidfinder.Common {
                     NullValueHandling = NullValueHandling.Ignore
                 };
                 Blacklist = JsonConvert.DeserializeObject<ObservableCollection<string>>(input, jsonSettings);
-            } else {
+            }
+            else {
                 Blacklist = new ObservableCollection<string>();
             }
             Save();
@@ -37,7 +33,7 @@ namespace GbfRaidfinder.Common {
                 DefaultValueHandling = DefaultValueHandling.Populate,
                 Formatting = Formatting.Indented
             };
-            jsonSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            jsonSettings.Converters.Add(new StringEnumConverter {CamelCaseText = true});
             var output = JsonConvert.SerializeObject(Blacklist, jsonSettings);
 
             var folder = Path.GetDirectoryName(_configFile);
@@ -46,7 +42,8 @@ namespace GbfRaidfinder.Common {
             }
             try {
                 File.WriteAllText(_configFile, output);
-            } catch (Exception) {
+            }
+            catch (Exception) {
                 //ignore
             }
         }

@@ -8,12 +8,15 @@ using Newtonsoft.Json.Converters;
 
 namespace GbfRaidfinder.Common {
     public class RaidsController : IRaidsController {
-        private readonly string _configFile = Path.Combine(Directory.GetCurrentDirectory(), "Raids.json");
-        public ObservableCollection<FollowModel> Follows { get; set; }
         private readonly IBlacklistController _blacklistController;
+        private readonly string _configFile = Path.Combine(Directory.GetCurrentDirectory(), "Raids.json");
+
         public RaidsController(IBlacklistController blacklistController) {
             _blacklistController = blacklistController;
         }
+
+        public ObservableCollection<FollowModel> Follows { get; set; }
+
         public void Load() {
             if (File.Exists(_configFile)) {
                 var input = File.ReadAllText(_configFile);

@@ -6,6 +6,7 @@
         string Id { get; set; }
         string Language { get; set; }
         bool Clicked { get; set; }
+        bool Translated { get; set; }
         string Avatar { get; set; }
         string Text { get; set; }
     }

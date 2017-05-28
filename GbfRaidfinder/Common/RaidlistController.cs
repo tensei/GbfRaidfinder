@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using GbfRaidfinder.Data;
 using GbfRaidfinder.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Net;
-using System.Text;
 
 namespace GbfRaidfinder.Common {
     public class RaidListController : IRaidlistController {
@@ -17,14 +17,16 @@ namespace GbfRaidfinder.Common {
 
         public void Load() {
             ObservableCollection<RaidListItem> remote;
-            try{
+            try {
                 var web = new WebClient {
                     Encoding = Encoding.UTF8
                 };
-                var js = web.DownloadString("https://raw.githubusercontent.com/tensei/GbfRaidfinder/master/List/Raidlist.json");
+                var js = web.DownloadString(
+                    "https://raw.githubusercontent.com/tensei/GbfRaidfinder/master/List/Raidlist.json");
 
                 remote = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(js);
-            } catch {
+            }
+            catch {
                 remote = new ObservableCollection<RaidListItem>(Raids.RaidBosses);
             }
             ObservableCollection<RaidListItem> local;
@@ -38,7 +40,8 @@ namespace GbfRaidfinder.Common {
                 };
                 local = JsonConvert.DeserializeObject<ObservableCollection<RaidListItem>>(input,
                     jsonSettings);
-            } else {
+            }
+            else {
                 local = new ObservableCollection<RaidListItem>(Raids.RaidBosses);
             }
             CombineLists(local.ToList(), remote.ToList());
@@ -75,11 +78,12 @@ namespace GbfRaidfinder.Common {
             var finenamesJa = finallist.Select(l => l.Japanese.ToLower());
 
             for (var i = 0; i < local.Count; i++) {
-                if (!finalenamesEn.Contains(local[i].English.ToLower()) && !finenamesJa.Contains(local[i].Japanese.ToLower())) {
+                if (!finalenamesEn.Contains(local[i].English.ToLower()) &&
+                    !finenamesJa.Contains(local[i].Japanese.ToLower())) {
                     try {
                         finallist.Insert(i, local[i]);
                     }
-                    catch (Exception e) {
+                    catch (Exception) {
                         finallist.Add(local[i]);
                     }
                 }
