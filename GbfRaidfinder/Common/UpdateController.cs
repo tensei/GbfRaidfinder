@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Globalization;
-using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GbfRaidfinder.Common {
     public static class UpdateController {
-        public const float Localver = 0.75f;
+        public const float Localver = 0.80f;
+        private const string Url = "http://tensei.moe/api/v1/gbfraidfinder/version";
 
         public static async Task<bool> Check() {
-            //https://raw.githubusercontent.com/tensei/GbfRaidfinder/master/GbfRaidfinder/Assets/version.txt
             try {
                 string ver;
-                using (var web = new WebClient {Encoding = Encoding.UTF8}) {
-                    ver = await web.DownloadStringTaskAsync(
-                        "https://raw.githubusercontent.com/tensei/GbfRaidfinder/master/GbfRaidfinder/Assets/version.txt");
+                using (var web = new HttpClient()) {
+                    ver = await web.GetStringAsync(Url);
                 }
                 return float.Parse(ver, CultureInfo.InvariantCulture) > Localver;
             }
