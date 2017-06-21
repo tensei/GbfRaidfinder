@@ -68,95 +68,93 @@
                     </StackPanel>
                 </Grid>
             </materialDesign:ColorZone>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding Tweets}" HorizontalContentAlignment="Stretch">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <StackPanel>
-                                    <Button Background="Transparent" BorderThickness="0" Padding="4" Height="Auto"
-                                            MinHeight="30"
-                                            Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:BossView}}}"
-                                            HorizontalContentAlignment="Stretch" Margin="2,4,2,2"
-                                            VerticalContentAlignment="Center"
-                                            Command="{Binding DataContext.CopyCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
-                                            CommandParameter="{Binding}">
-                                        <Button.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="Translate"
-                                                          Command="{Binding PlacementTarget.Tag.TranslateCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding}" />
-                                                <MenuItem Header="Copy Tweet link"
-                                                          Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding Profile}" />
-                                                <MenuItem Header="Copy Avatar link"
-                                                          Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding Avatar}" />
-                                                <MenuItem Header="Copy Text"
-                                                          Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding Text}" />
-                                                <MenuItem Header="Blacklist User"
-                                                          Command="{Binding PlacementTarget.Tag.BlacklistCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
-                                                          CommandParameter="{Binding User}" />
-                                            </ContextMenu>
-                                        </Button.ContextMenu>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="20" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-                                            <Image Source="{Binding Avatar}" MaxHeight="20" Margin="0,0,5,0" />
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding User}"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Left" TextWrapping="Wrap" />
-                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Time}"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Right" Margin="10,0" />
-                                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Id}"
-                                                       VerticalAlignment="Center" FontWeight="Bold" />
-                                            <Button Grid.Row="1" Grid.Column="0" Padding="4,8"
-                                                    VerticalAlignment="Stretch"
-                                                    HorizontalAlignment="Stretch"
-                                                    Foreground="White"
-                                                    ToolTip="Google Translate"
-                                                    materialDesign:RippleAssist.IsCentered="True"
-                                                    materialDesign:RippleAssist.ClipToBounds="True"
-                                                    Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
-                                                    Style="{DynamicResource MaterialDesignToolButton}"
-                                                    Command="{Binding DataContext.TranslateCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
-                                                    CommandParameter="{Binding}" Panel.ZIndex="1">
-                                                <materialDesign:PackIcon Kind="GoogleTranslate" />
-                                            </Button>
-                                            <materialDesign:Card Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-                                                                 Padding="4" Margin="4,4,4,0"
-                                                                 Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
-                                                                 materialDesign:ShadowAssist.ShadowDepth="Depth2">
-                                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
-                                            </materialDesign:Card>
-                                        </Grid>
-                                    </Button>
-                                    <Separator Margin="0" Height="2" VerticalAlignment="Bottom"
-                                               HorizontalAlignment="Stretch"
-                                               Style="{DynamicResource MaterialDesignLightSeparator}" />
-                                </StackPanel>
-                            </Grid>
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Clicked}" Value="true">
-                                    <!--<Setter Property="Foreground" Value="Gray"/>-->
-                                    <Setter Property="Opacity" Value="0.3" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Tweets}" HorizontalContentAlignment="Stretch" Style="{DynamicResource ItemsControlVirtualizedStyle}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel>
+                                <Button Background="Transparent" BorderThickness="0" Padding="4" Height="Auto"
+                                        MinHeight="30"
+                                        Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:BossView}}}"
+                                        HorizontalContentAlignment="Stretch" Margin="2,4,2,2"
+                                        VerticalContentAlignment="Center"
+                                        Command="{Binding DataContext.CopyCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
+                                        CommandParameter="{Binding}">
+                                    <Button.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Translate"
+                                                        Command="{Binding PlacementTarget.Tag.TranslateCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                        CommandParameter="{Binding}" />
+                                            <MenuItem Header="Copy Tweet link"
+                                                        Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                        CommandParameter="{Binding Profile}" />
+                                            <MenuItem Header="Copy Avatar link"
+                                                        Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                        CommandParameter="{Binding Avatar}" />
+                                            <MenuItem Header="Copy Text"
+                                                        Command="{Binding PlacementTarget.Tag.CopyUrlCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                        CommandParameter="{Binding Text}" />
+                                            <MenuItem Header="Blacklist User"
+                                                        Command="{Binding PlacementTarget.Tag.BlacklistCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                                        CommandParameter="{Binding User}" />
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Image Source="{Binding Avatar}" MaxHeight="20" Margin="0,0,5,0" />
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding User}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Left" TextWrapping="Wrap" />
+                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Time}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Right" Margin="10,0" />
+                                        <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Id}"
+                                                    VerticalAlignment="Center" FontWeight="Bold" />
+                                        <Button Grid.Row="1" Grid.Column="0" Padding="4,8"
+                                                VerticalAlignment="Stretch"
+                                                HorizontalAlignment="Stretch"
+                                                Foreground="White"
+                                                ToolTip="Google Translate"
+                                                materialDesign:RippleAssist.IsCentered="True"
+                                                materialDesign:RippleAssist.ClipToBounds="True"
+                                                Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
+                                                Style="{DynamicResource MaterialDesignToolButton}"
+                                                Command="{Binding DataContext.TranslateCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BossView}}}"
+                                                CommandParameter="{Binding}" Panel.ZIndex="1">
+                                            <materialDesign:PackIcon Kind="GoogleTranslate" />
+                                        </Button>
+                                        <materialDesign:Card Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                                Padding="4" Margin="4,4,4,0"
+                                                                Visibility="{Binding Text, Converter={StaticResource StringToVisibilityConverter}}"
+                                                                materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                                        </materialDesign:Card>
+                                    </Grid>
+                                </Button>
+                                <Separator Margin="0" Height="2" VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Stretch"
+                                            Style="{DynamicResource MaterialDesignLightSeparator}" />
+                            </StackPanel>
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Clicked}" Value="true">
+                                <!--<Setter Property="Foreground" Value="Gray"/>-->
+                                <Setter Property="Opacity" Value="0.3" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
         <Grid>
             <Grid.RowDefinitions>

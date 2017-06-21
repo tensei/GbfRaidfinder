@@ -31,55 +31,48 @@
                          MinWidth="200" VerticalAlignment="Center" />
             </Grid>
         </materialDesign:ColorZone>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" VerticalAlignment="Stretch">
-            <ItemsControl ItemsSource="{Binding RaidListItems}" x:Name="itemsControl">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel IsItemsHost="True" Orientation="Vertical"
-                                                VirtualizationMode="Recycling" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type data:RaidListItem}">
-                        <Button BorderThickness="0" Background="Transparent" Padding="0" Width="300" Height="100"
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding RaidListItems}" x:Name="itemsControl"
+                      Style="{DynamicResource ItemsControlVirtualizedStyle}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type data:RaidListItem}">
+                    <Button BorderThickness="0" Background="Transparent" Padding="0" Width="300" Height="100"
                                 Visibility="{Binding Visibility, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Command="{Binding DataContext.AddCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RaidBossesView}}}"
                                 CommandParameter="{Binding}"
                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                            <Grid>
-                                <Image Source="{Binding Image}" Stretch="UniformToFill" />
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Bottom"
+                        <Grid>
+                            <Image Source="{Binding Image}" Stretch="UniformToFill" />
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom"
                                             HorizontalAlignment="Left">
-                                    <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold" Margin="6,0">
-                                        <TextBlock.Effect>
-                                            <DropShadowEffect ShadowDepth="0"
+                                <TextBlock Text="{Binding English}" FontSize="16" FontWeight="Bold" Margin="6,0">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect ShadowDepth="0"
                                                               Color="Black"
                                                               Opacity="1"
                                                               BlurRadius="5" />
-                                        </TextBlock.Effect>
-                                    </TextBlock>
-                                    <TextBlock Text="{Binding Japanese}" FontSize="16" FontWeight="Bold" Margin="6,0">
-                                        <TextBlock.Effect>
-                                            <DropShadowEffect ShadowDepth="0"
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Japanese}" FontSize="16" FontWeight="Bold" Margin="6,0">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect ShadowDepth="0"
                                                               Color="Black"
                                                               Opacity="1"
                                                               BlurRadius="5" />
-                                        </TextBlock.Effect>
-                                    </TextBlock>
-                                </StackPanel>
-                                <materialDesign:PackIcon Kind="Check" HorizontalAlignment="Left"
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                            </StackPanel>
+                            <materialDesign:PackIcon Kind="Check" HorizontalAlignment="Left"
                                                          VerticalAlignment="Top" Width="60" Height="60"
                                                          Visibility="{Binding Following, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                          Foreground="GreenYellow" FontSize="16">
-                                    <materialDesign:PackIcon.Effect>
-                                        <DropShadowEffect BlurRadius="5" Color="Black" Opacity="1" ShadowDepth="0" />
-                                    </materialDesign:PackIcon.Effect>
-                                </materialDesign:PackIcon>
-                            </Grid>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                                <materialDesign:PackIcon.Effect>
+                                    <DropShadowEffect BlurRadius="5" Color="Black" Opacity="1" ShadowDepth="0" />
+                                </materialDesign:PackIcon.Effect>
+                            </materialDesign:PackIcon>
+                        </Grid>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>
